@@ -3,9 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Result consultoria - Login</title>
+    <title>CaaS - Criar nova conta</title>
+    <link rel="stylesheet" href="./../assets/css/global-styles.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-    <p>Tela de login</p>
+  <div class="container">
+    <h1>Olá, 👋</h1>
+    <form id="formCreateAccount">
+      <div class="input-group">
+        <label for="name">Seu nome completo:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="input-group">
+        <label for="bakeryName">Nome da confeitaria:</label>
+        <input type="bakeryName" id="bakeryName" name="bakeryName" required>
+      </div>
+      <div class="input-group">
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="input-group input-group-no-margin">
+        <label for="password">Senha:</label>
+        <div class="input-icon-end">
+          <input type="password" id="password" name="password" required>
+          <i data-feather="eye" class="icon-button" onclick="javascript:togglePassword()" id="eye"></i>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-primary btn-full" type="submit">Criar minha conta</button>
+        <button class="btn btn-secondary btn-full" type="button" id="btGoToLogin">Voltar para login</button>
+      </div>
+    </form>
+    <span>Made with ❤️ by <a href="https://www.resultconsultoria.com.br/" target="_blank">Result Consultoria®</a></span>
+  </div>
+  <script src="./script.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="../assets/js/global-scripts.js"></script>
 </body>
 </html>

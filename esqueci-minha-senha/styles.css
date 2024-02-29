@@ -22,8 +22,6 @@ div.container {
   align-items: center;
 
   padding: 32px 47px;
-
-  overflow-y: scroll;
 }
 
 div.container form {
@@ -33,13 +31,6 @@ div.container form {
 div.container span {
   font-size: 12px;
   margin-top: 32px;
-}
-
-div.container form a {
-  display: block;
-  text-align: end;
-  margin-top: 16px;
-  margin-bottom: 16px;
 }
 
 div.container span a {
@@ -54,12 +45,9 @@ div.container div.btn-group {
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-top: 40px;
 }
 
 div.container div.btn-group .btn:last-child {
   margin-top: 32px;
-}
-
-.btn-group {
-  margin-top: 40px;
 }

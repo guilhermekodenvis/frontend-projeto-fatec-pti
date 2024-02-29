@@ -1,10 +1,10 @@
 const btLogin = document.getElementById("btLogin");
 const btCreateNewAccount = document.getElementById("btCreateNewAccount");
 
-btLogin.onclick = () => {
-    window.location.href = "login"
-}
+btLogin.addEventListener("click", () => {
+  window.location.href = "login"
+})
 
-btLogin.onclick = () => {
-    window.location.href = "criar-nova-conta"
-}
+btCreateNewAccount.addEventListener("click", () => {
+  window.location.href = "criar-nova-conta"
+})

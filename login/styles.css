@@ -1,0 +1,59 @@
+body {
+  background: url(./../assets/img/authentication-background.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+div.container {
+  width: 458px;
+  height: calc(100% - 32px);
+  margin-left: auto;
+  margin-right: 16px;
+  background: #f8f4ff;
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 32px 47px;
+}
+
+div.container form {
+  width: 100%;
+}
+
+div.container span {
+  font-size: 12px;
+  margin-top: 32px;
+}
+
+div.container form a {
+  display: block;
+  text-align: end;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+div.container span a {
+  color: inherit;
+  font-weight: 700;
+  font-size: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+div.container div.btn-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+div.container div.btn-group .btn:last-child {
+  margin-top: 32px;
+}
