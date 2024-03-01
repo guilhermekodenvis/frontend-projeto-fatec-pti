@@ -1,28 +1,4 @@
-const formLogin = document.getElementById("formLogin")
 const btCreateNewAccount = document.getElementById("btCreateNewAccount")
-
-formLogin.addEventListener("submit", async (e) => {
-  e.preventDefault()
-  
-  const email = e.target.elements.email.value
-  const password = e.target.elements.password.value
-  
-  const data = { email, password }
-  console.log(data)
-  // const response = await fetch("/login", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify(data),
-  // })
-  // if (response.status === 200) {
-    window.location.href = "/dashboard"
-  // } else {
-  //   const error = await response.json()
-  //   document.getElementById("error").innerText = error.message
-  // }
-})
 
 btCreateNewAccount.addEventListener("click", () => {
   window.location.href = "/criar-nova-conta"

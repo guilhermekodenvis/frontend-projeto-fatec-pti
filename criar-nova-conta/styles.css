@@ -23,7 +23,7 @@ div.container {
 
   padding: 32px 47px;
 
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 div.container form {
