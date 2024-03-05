@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CaaS - Ingredientes</title>
+  
+  <link rel="stylesheet" href="./../assets/css/global-styles.css">
+  <link rel="stylesheet" href="./../assets/css/components.css">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+  <style>
+    select option {
+      background-color: #F8F4FF; /* cor de fundo das opções */
+      display: inline-block;
+      /* padding-left: 24px;
+      padding-right: 24px;
+      padding-top: 12px;
+      padding-bottom: 12px; */
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 1); /* sombra das opções */
+      border: none;
+      
+    }
+
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      padding: 5px;
+      text-indent: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <div class="dashboard-side-menu"></div>
+    <div class="dashboard-content">
+      <div class="dashboard-header">
+        <div class="header-title">
+          <h1>Ingredientes</h1>
+          <div class="btn-icon">
+            <i data-feather="log-out" id="logoutButton"></i>
+          </div>
+        </div>
+        <p>Veja os ingredientes que foram cadastrados, edite e exclua-los. </p>
+      </div>
+      <div class="dashboard-body">
+        <div class="top-actions-group">
+          <button class="btn btn-primary btn-wrap" id="btAddIngredient">Novo ingrediente</button>
+      </div>
+    </div>
+
+    <table id="tableIngredients">
+      <thead>
+        <tr>
+          <th>Descrição</th>
+          <th>Quantidade</th>
+          <th>Preço</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+    <div id="noDataFound"></div>
+  </div>
+
+
+
+  <div class="drawer drawer-close" id="drawerIngredient">
+    <i data-feather="x" class="close-button" id="closeButton"></i>
+    <h1 id="drawerHeader">
+      Novo ingrediente 🍫
+    </h1>
+    <p class="form-description">
+      Suponha que você queira cadastrar o ingrediente "Coca-cola 2L". Coloque a unidade como L. Informe o preço de uma unidade e, no campo quantidade, você irá informar que em uma unidade tem 2L.
+    </p>
+
+    
+
+    <form id="formCreateNewIngredient">
+      <div class="input-group">
+        <label for="description">Descrição do produto:</label>
+        <input type="text" id="description" name="description" required>
+      </div>
+      <div class="input-group">
+        <label for="measurementUnity">Unidade de medida de um item:</label>
+        <select name="measurementUnity" id="measurementUnity" required>
+          <option value="null" selected>Selecione</option>
+          <option value="ml">Mililitros (ml)</option>
+          <option value="l">Litro (L)</option>
+          <option value="g">Gramas (g)</option>
+          <option value="kg">Quilogramas (Kg)</option>
+          <option value="un">Unidade (Un)</option>
+        </select>
+      </div>
+      <div class="input-group">
+        <label for="price">Preço de um item:</label>
+        <input type="text" id="price" name="price" required>
+      </div>
+      <div class="input-group">
+        <label for="quantityInItem">Quantidade de unidades em um item:</label>
+        <input type="text" id="quantityInItem" name="quantityInItem" required>
+      </div>
+      
+      <div class="button-group">
+        <button class="btn btn-secondary" type="button" id="btCancel">Cancelar</button>
+        <button class="btn btn-primary" type="submit">Salvar ingrediente</button>
+      </div>
+
+      <input type="hidden" name="ingredientEditingId" id="ingredientEditingId">
+    </form>
+  </div>
+
+  <div class="glass glass-close" id="glass"></div>
+  <span class="loader" id="loader"></span>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="../assets/js/global-scripts.js"></script>
+  <script type="module" src="./module-script.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>

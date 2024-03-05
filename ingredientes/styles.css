@@ -1,0 +1,21 @@
+.top-actions-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  margin-top: auto;
+}
+
+.button-group button {
+  margin-top: 40px;
+}

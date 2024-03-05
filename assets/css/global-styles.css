@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 * {
   margin: 0;
@@ -23,7 +23,7 @@ textarea,
 select,
 a,
 p {
-  font-family: "Playfair Display", serif;
+  font-family: "Poppins", sans-serif;
   font-size: 16px;
 }
 
@@ -57,6 +57,14 @@ h1 {
 }
 
 input {
+  padding: 8px;
+  border: none;
+  background: transparent;
+  border-bottom: 1px solid #130132;
+  width: 100%;
+}
+
+select {
   padding: 8px;
   border: none;
   background: transparent;
@@ -130,7 +138,8 @@ input {
 }
 
 .input-group label {
-  font-weight: 700;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
 div.input-group:not(.input-group-no-margin) {
@@ -150,11 +159,29 @@ div.input-group:not(.input-group-no-margin) {
   padding-right: 40px;
 }
 
-.icon-button {
+.input-group div.input-icon-start {
+  width: 100%;
+  position: relative;
+}
+
+.input-group div.input-icon-start input {
+  padding-left: 40px;
+}
+
+.input-icon-button-right {
   right: 0px;
   position: absolute;
   font-size: 24px;
   margin-left: 8px;
   margin-right: 8px;
   cursor: pointer;
+}
+
+.input-icon-left {
+  left: 0px;
+  position: absolute;
+  font-size: 24px;
+  margin-left: 8px;
+  margin-right: 8px;
+  bottom: 10px;
 }
