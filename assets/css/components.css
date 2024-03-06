@@ -17,9 +17,19 @@
   align-items: center;
 }
 
+.dashboard-side-menu-iframe {
+  width: 224px;
+  height: calc(100vh - 32px);
+
+  overflow: hidden;
+}
+
 .dashboard-side-menu {
   background: #130132;
   border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
 
   width: 224px;
   height: calc(100vh - 32px);
@@ -28,6 +38,32 @@
 .dashboard-content {
   flex: 1;
   margin-left: 16px;
+}
+
+.sidebar-header {
+  height: 200px;
+}
+
+.sidebar-item {
+  padding: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  background-color: #482a7d;
+  border-radius: 8px;
+
+  color: #f8f4ff;
+
+  font-weight: 500;
+  margin: 4px 8px;
+}
+
+.sidebar-item:hover {
+  background-color: #392164;
 }
 
 .btn-icon {

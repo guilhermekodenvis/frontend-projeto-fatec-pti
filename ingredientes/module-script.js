@@ -13,8 +13,13 @@ import {
   getDoc,
   setDoc,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import {
+  getAuth,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
 import { sessionLogout } from "../assets/js/session-controller.js";
+import { createSidebar } from "../components/sidebar.js";
 
 const formCreateNewIngredient = document.getElementById(
   "formCreateNewIngredient"
@@ -186,6 +191,11 @@ logoutButton.addEventListener("click", () => {
       console.error(error);
       showDangerToast("Erro ao deslogar. Tente novamente mais tarde.");
     });
+});
+
+window.addEventListener("load", () => {
+  const createdSidebar = createSidebar();
+  sidebar.appendChild(createdSidebar);
 });
 
 window.addEventListener("load", async function () {
