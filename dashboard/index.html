@@ -1,11 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  
-</body>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaaS - Dashboard</title>
+    
+    <link rel="stylesheet" href="./../assets/css/global-styles.css">
+    <link rel="stylesheet" href="./../assets/css/components.css">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div id="sidebar"></div>
+      <div class="dashboard-content">
+        <div class="dashboard-header">
+          <div class="header-title">
+            <h1>Dashboard</h1>
+            <div class="btn-icon">
+              <i data-feather="log-out" id="logoutButton"></i>
+            </div>
+          </div>
+          <p>Faça a análise das suas vendas. Veja os produtos mais vendidos e tome boas decisões de negócio. </p>
+        </div>
+        <div class="dashboard-body">
+          <div class="top-actions-group">
+            <button class="btn btn-secondary btn-wrap" id="btGoToSalesHistory">Histórico das vendas</button>
+            <button class="btn btn-primary btn-wrap" id="btRegisterSale">Registrar venda</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="drawer drawer-close" id="drawerRegisterSale">
+      <i data-feather="x" class="close-button" id="closeButton"></i>
+      <h1 id="drawerHeader">
+        Registrar venda 💸
+      </h1>
+      <p class="form-description">
+        Informe os produtos a serem vendidos e a quantidade de cada um. Adicione a lista e salve para registrar a venda.
+      </p>
+
+      <form id="formRegisterNewSale">
+        <div class="register-sale-form-button-group">
+          <button class="btn btn-secondary" type="button" id="btCancel">Cancelar</button>
+          <button class="btn btn-primary" type="submit">Registrar venda</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="glass glass-close" id="glass"></div>
+    <span class="loader" id="loader"></span>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="../assets/js/global-scripts.js"></script>
+    <script type="module" src="./module-script.js"></script>
+    <script src="./script.js"></script>
+  </body>
 </html>

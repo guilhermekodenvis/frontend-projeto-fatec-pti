@@ -4,7 +4,6 @@ const glass = document.getElementById("glass");
 const closeButton = document.getElementById("closeButton");
 const drawerHeader = document.getElementById("drawerHeader");
 const btCancel = document.getElementById("btCancel");
-const sidebar = document.getElementById("sidebar");
 
 const toggleDrawer = () => {
   drawerIngredient.classList.toggle("drawer-close");

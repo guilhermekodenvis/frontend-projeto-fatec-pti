@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaaS - Receitas</title>
+    
+    <link rel="stylesheet" href="./../assets/css/global-styles.css">
+    <link rel="stylesheet" href="./../assets/css/components.css">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div id="sidebar"></div>
+      <div class="dashboard-content">
+        <div class="dashboard-header">
+          <div class="header-title">
+            <h1>Receitas</h1>
+            <div class="btn-icon">
+              <i data-feather="log-out" id="logoutButton"></i>
+            </div>
+          </div>
+          <p>Crie aqui suas receitas, edite e exclua-as.</p>
+        </div>
+        <div class="dashboard-body">
+          <div class="top-actions-group">
+            <button class="btn btn-primary btn-wrap" id="btNewRevenue">Nova receita</button>
+        </div>
+      </div>
+
+      <table id="tableRevenues">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Custo</th>
+            <th>Preço sugerido (220%)</th>
+            <th>Preço de venda</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+  
+      <div id="noDataFound"></div>
+    </div>
+    
+    <div class="drawer drawer-close" id="drawerNewRevenue">
+      <i data-feather="x" class="close-button" id="closeButton"></i>
+      <h1 id="drawerHeader">
+        Nova receita 🧁
+      </h1>
+      <p class="form-description">
+        Informe os ingredientes e os materiais usados na receita. Adicione a lista e salve para registrar a receita.
+      </p>
+
+      <form id="formNewRevenue">
+        <div class="register-sale-form-button-group">
+          <button class="btn btn-secondary" type="button" id="btCancel">Cancelar</button>
+          <button class="btn btn-primary" type="submit">Salvar receita</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="glass glass-close" id="glass"></div>
+    <span class="loader" id="loader"></span>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="../assets/js/global-scripts.js"></script>
+    <script type="module" src="./module-script.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>

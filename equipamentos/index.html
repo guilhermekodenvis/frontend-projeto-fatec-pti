@@ -1,11 +1,89 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CaaS - Equipamentos</title>
-</head>
-<body>
-  
-</body>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaaS - Equipamentos</title>
+    
+    <link rel="stylesheet" href="./../assets/css/global-styles.css">
+    <link rel="stylesheet" href="./../assets/css/components.css">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div id="sidebar"></div>
+      <div class="dashboard-content">
+        <div class="dashboard-header">
+          <div class="header-title">
+            <h1>Equipamentos</h1>
+            <div class="btn-icon">
+              <i data-feather="log-out" id="logoutButton"></i>
+            </div>
+          </div>
+          <p>Fale aqui os equipamentos que você usa no seu dia-a-dia.</p>
+        </div>
+        <div class="dashboard-body">
+          <div class="top-actions-group">
+            <button class="btn btn-primary btn-wrap" id="btAddEquipament">Adicionar equipamento</button>
+        </div>
+      </div>
+
+      <table id="tableEquipaments">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Recurso</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <div id="noDataFound"></div>
+    </div>
+    
+    <div class="drawer drawer-close" id="drawerAddEquipament">
+      <i data-feather="x" class="close-button" id="closeButton"></i>
+      <h1 id="drawerHeader">
+        Novo equipamento🍴
+      </h1>
+      <p class="form-description">
+        Dê um nome para o seu equipamento e informe o recurso que você utiliza. Iremos fazer um cálculo aproximado do custo de uso desse equipamento de acordo com o tempo utilizado dele na receita.
+      </p>
+
+      <form id="formAddEquipament">
+        <div class="input-group">
+          <label for="description">Descrição:</label>
+          <input type="text" id="description" name="description" required>
+        </div>
+        <div class="input-group">
+          <label for="resourceUsed">Recurso utilizado:</label>
+          <select name="resourceUsed" id="resourceUsed" required>
+            <option value="null" selected>Selecione</option>
+            <option value="el">Eletricidade</option>
+            <option value="ag">Água</option>
+            <option value="ga">Gás</option>
+          </select>
+        </div>
+
+        
+        <input type="hidden" name="equipamentEditingId" id="equipamentEditingId">
+
+        <div class="add-equipament-form-button-group">
+          <button class="btn btn-secondary" type="button" id="btCancel">Cancelar</button>
+          <button class="btn btn-primary" type="submit">Salvar equipamento</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="glass glass-close" id="glass"></div>
+    <span class="loader" id="loader"></span>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="../assets/js/global-scripts.js"></script>
+    <script type="module" src="./module-script.js"></script>
+    <script src="./script.js"></script>
+  </body>
 </html>

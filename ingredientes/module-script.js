@@ -65,7 +65,6 @@ const editIngredient = (ingredientId) => {
     .then((doc) => {
       if (doc.exists()) {
         const ingredient = doc.data();
-        console.log("Document data:", ingredient);
         description.value = ingredient.description;
         measurementUnity.value = ingredient.measurementUnity;
         price.value = ingredient.price;
