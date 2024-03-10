@@ -76,7 +76,7 @@ const deleteEquipament = (equipamentId) => {
   deleteDoc(doc(db, "equipaments", equipamentId))
     .then(() => {
       loader.style.display = "none";
-      showWarningToast("Equipamento deletado com sucesso!");
+      showDangerToast("Equipamento deletado com sucesso!");
       setTimeout(() => {
         window.location.reload();
       }, 2000);
@@ -205,14 +205,14 @@ window.addEventListener("load", async function () {
 
   allDeleteButtons.forEach((button) => {
     const ingredientId = button.id.split("-")[1];
-    button.addEventListener("click", () => {
+    button.parentNode.addEventListener("click", () => {
       deleteEquipament(ingredientId);
     });
   });
 
   allEditButtons.forEach((button) => {
     const ingredientId = button.id.split("-")[1];
-    button.addEventListener("click", () => {
+    button.parentNode.addEventListener("click", () => {
       editEquipament(ingredientId);
     });
   });

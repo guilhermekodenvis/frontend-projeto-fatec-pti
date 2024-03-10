@@ -20,6 +20,7 @@ import {
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
 import { sessionLogout } from "../assets/js/session-controller.js";
 import { createSidebar } from "../components/sidebar.js";
+import { showMesurementUnity } from "../assets/js/show-mesurement-unity.js";
 
 const formCreateNewIngredient = document.getElementById(
   "formCreateNewIngredient"
@@ -30,23 +31,6 @@ const noDataFound = document.getElementById("noDataFound");
 const btAddIngredient = document.getElementById("btAddIngredient");
 const ingredientEditingId = document.getElementById("ingredientEditingId");
 const logoutButton = document.getElementById("logoutButton");
-
-const getMesurementUnity = (measurementUnity) => {
-  switch (measurementUnity) {
-    case "kg":
-      return "Kg";
-    case "g":
-      return "g";
-    case "l":
-      return "L";
-    case "ml":
-      return "ml";
-    case "un":
-      return "Un.";
-    default:
-      return "";
-  }
-};
 
 const editIngredient = (ingredientId) => {
   loader.style.display = "block";
@@ -88,7 +72,7 @@ const deleteIngredient = (ingredientId) => {
   deleteDoc(doc(db, "ingredients", ingredientId))
     .then(() => {
       loader.style.display = "none";
-      showWarningToast("Ingrediente deletado com sucesso!");
+      showDangerToast("Ingrediente deletado com sucesso!");
       setTimeout(() => {
         window.location.reload();
       }, 2000);
@@ -217,7 +201,7 @@ window.addEventListener("load", async function () {
 
     row.innerHTML = `
       <td>${ingredient.description}</td>
-      <td>${ingredient.quantityInItem}${getMesurementUnity(
+      <td>${ingredient.quantityInItem}${showMesurementUnity(
       ingredient.measurementUnity
     )}</td>
       <td>${formatNumberToBRLCurrency(ingredient.price)}</td>
@@ -242,14 +226,14 @@ window.addEventListener("load", async function () {
 
   allDeleteButtons.forEach((button) => {
     const ingredientId = button.id.split("-")[1];
-    button.addEventListener("click", () => {
+    button.parentNode.addEventListener("click", () => {
       deleteIngredient(ingredientId);
     });
   });
 
   allEditButtons.forEach((button) => {
     const ingredientId = button.id.split("-")[1];
-    button.addEventListener("click", () => {
+    button.parentNode.addEventListener("click", () => {
       editIngredient(ingredientId);
     });
   });

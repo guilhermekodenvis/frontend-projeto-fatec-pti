@@ -57,6 +57,11 @@ h1 {
   margin-bottom: 1rem;
 }
 
+h2 {
+  font-size: 36px;
+  margin-bottom: 1rem;
+}
+
 input {
   padding: 8px;
   border: none;
@@ -76,6 +81,11 @@ select {
 .btn {
   padding: 16px 24px;
   border-radius: 16px;
+  transition: 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
 .btn-full {
@@ -87,7 +97,6 @@ select {
 .btn-primary {
   background: #130132ff;
   color: #f8f4ff;
-  transition: 0.2s;
 }
 
 .btn-primary:hover {
@@ -98,7 +107,6 @@ select {
   background: #13013200;
   color: #130132;
   border: 1px solid #130132;
-  transition: 0.2s;
 }
 
 .btn-secondary:hover {

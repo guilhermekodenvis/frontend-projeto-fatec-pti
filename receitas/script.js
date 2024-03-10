@@ -4,8 +4,24 @@ const closeButton = document.getElementById("closeButton");
 const glass = document.getElementById("glass");
 const drawerHeader = document.getElementById("drawerHeader");
 const btCancel = document.getElementById("btCancel");
+const descartIngredientButton = document.getElementById(
+  "descartIngredientButton"
+);
+const descartEquipamentButton = document.getElementById(
+  "descartEquipamentButton"
+);
+const totalCost = document.getElementById("totalCost");
+const suggestedPrice = document.getElementById("suggestedPrice");
 
 const toggleDrawer = () => {
+  totalCost.innerText = (0).toLocaleString("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  });
+  suggestedPrice.innerText = (0).toLocaleString("pt-br", {
+    style: "currency",
+    currency: "BRL",
+  });
   drawerNewRevenue.classList.toggle("drawer-close");
   drawerNewRevenue.classList.toggle("drawer-open");
   glass.classList.toggle("glass-close");
@@ -36,3 +52,33 @@ glass.addEventListener("click", closeDrawer);
 closeButton.addEventListener("click", closeDrawer);
 
 btCancel.addEventListener("click", closeDrawer);
+
+descartIngredientButton.addEventListener("click", () => {
+  const formAddIngredientToRevenue = document.getElementById(
+    "formAddIngredientToRevenue"
+  );
+  const selectIngredients = document.getElementById("selectIngredients");
+  const quantity = document.getElementById("quantity");
+  const quantityMeasurementUnity = document.getElementById(
+    "quantityMeasurementUnity"
+  );
+
+  selectIngredients.value = "null";
+  quantity.value = "";
+  quantityMeasurementUnity.innerText = "";
+
+  formAddIngredientToRevenue.style.display = "none";
+});
+
+descartEquipamentButton.addEventListener("click", () => {
+  const formAddEquipamentToRevenue = document.getElementById(
+    "formAddEquipamentToRevenue"
+  );
+  const selectEquipaments = document.getElementById("selectEquipaments");
+  const minutes = document.getElementById("minutes");
+
+  selectEquipaments.value = "null";
+  minutes.value = "";
+
+  formAddEquipamentToRevenue.style.display = "none";
+});

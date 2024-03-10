@@ -52,10 +52,118 @@
         Nova receita 🧁
       </h1>
       <p class="form-description">
-        Informe os ingredientes e os materiais usados na receita. Adicione a lista e salve para registrar a receita.
+        Informe os ingredientes e os equipamentos usados na receita. Adicione a lista e salve para registrar a receita.
       </p>
 
-      <form id="formNewRevenue">
+      
+      <form id="formNewRevenue" class="form-register-sale">
+
+        <div class="input-group">
+          <label for="description">Descrição da receita:</label>
+          <input type="text" id="description" name="description" required>
+        </div>
+
+        <h2>Ingredientes:</h2>
+        <div class="input-group">
+          <label for="selectIngredients">Selecione o ingrediente:</label>
+          <select id="selectIngredients" name="selectIngredients" required>
+            <option value="null">Selecione</option>
+          </select>
+        </div>
+
+        <div id="formAddIngredientToRevenue">
+          <div class="input-group">
+            <div>
+              <label for="quantity">Quantidade:</label>
+              <span id="quantityMeasurementUnity"></span>
+            </div>
+            <input type="text" id="quantity" name="quantity">
+          </div>
+
+          <div class="temp-form-button-group">
+            <button type="button" id="descartIngredientButton" class="btn btn-text btn-danger">
+              <i data-feather="x"></i>
+              Descartar
+            </button>
+            <button type="button" id="addIngredientButton" class="btn btn-text btn-success">
+              <i data-feather="check"></i>
+              Adicionar
+            </button>
+          </div>
+        </div>
+
+
+        <table id="tableIngredients">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Qtd.</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+
+        <h2 style="margin-top: 48px;">Equipamentos:</h2>
+        <div class="input-group">
+          <label for="selectEquipaments">Selecione o equipamento:</label>
+          <select id="selectEquipaments" name="selectEquipaments" required>
+            <option value="null">Selecione</option>
+          </select>
+        </div>
+
+        <div id="formAddEquipamentToRevenue">
+          <div class="input-group">
+            <div>
+              <label for="minutes">Minutos de uso:</label>
+            </div>
+            <input type="text" id="minutes" name="minutes">
+          </div>
+
+          <div class="temp-form-button-group">
+            <button type="button" id="descartEquipamentButton" class="btn btn-text btn-danger">
+              <i data-feather="x"></i>
+              Descartar
+            </button>
+            <button type="button" id="addEquipamentButton" class="btn btn-text btn-success">
+              <i data-feather="check"></i>
+              Adicionar
+            </button>
+          </div>
+        </div>
+
+
+        <table id="tableEquipaments">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Tempo</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+
+        <div class="input-group" style="margin-top: 48px;">
+          <h2>Modo de preparo:</h2>
+          <textarea id="preparingMode" name="preparingMode" required></textarea>
+        </div>
+
+        <h2 style="margin-top: 48px;">
+          Custos:
+        </h2>
+
+        <b>Custo total:</b>
+        <span id="totalCost"></span>
+        <b>Preço sugerido (220%):</b>
+        <span id="suggestedPrice"></span>
+        <div class="input-group" style="margin-top: 16px;">
+          <label for="salePrice">Preço de venda:</label>
+          <input type="text" id="salePrice" name="salePrice" required>
+        </div>
+
         <div class="register-sale-form-button-group">
           <button class="btn btn-secondary" type="button" id="btCancel">Cancelar</button>
           <button class="btn btn-primary" type="submit">Salvar receita</button>
