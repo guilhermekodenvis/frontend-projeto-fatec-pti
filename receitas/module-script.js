@@ -1,11 +1,7 @@
 import { db } from "../assets/js/firebase-module.js";
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
 import { showMesurementUnity } from "../assets/js/show-mesurement-unity.js";
-import {
-  showDangerToast,
-  showSuccessToast,
-  showWarningToast,
-} from "../assets/js/toast.js";
+import { showDangerToast, showSuccessToast } from "../assets/js/toast.js";
 import { createSidebar } from "../components/sidebar.js";
 import {
   collection,

@@ -4,6 +4,7 @@ const closeButton = document.getElementById("closeButton");
 const glass = document.getElementById("glass");
 const drawerHeader = document.getElementById("drawerHeader");
 const btCancel = document.getElementById("btCancel");
+const btGoToSalesHistory = document.getElementById("btGoToSalesHistory");
 
 const toggleDrawer = () => {
   drawerRegisterSale.classList.toggle("drawer-close");
@@ -28,6 +29,10 @@ const closeDrawer = () => {
 
   toggleDrawer();
 };
+
+btGoToSalesHistory.addEventListener("click", () => {
+  window.location.href = "/historico-das-vendas";
+});
 
 btRegisterSale.addEventListener("click", toggleDrawer);
 

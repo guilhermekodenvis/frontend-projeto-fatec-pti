@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CaaS - Hitórico das vendas</title>
+
+  <link rel="stylesheet" href="./../assets/css/global-styles.css">
+  <link rel="stylesheet" href="./../assets/css/components.css">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+  <div class="dashboard-container">
+  <div id="sidebar"></div>
+  <div class="dashboard-content">
+    <div class="dashboard-header">
+      <div class="header-title">
+        <h1>Histórico das vendas</h1>
+        <div class="btn-icon">
+          <i data-feather="log-out" id="logoutButton"></i>
+        </div>
+      </div>
+      <p>Analise aqui o histórico das suas vendas. Utilize o filtro de data para navegar. </p>
+    </div>
+
+    <div class="filter-container">
+      <div class="input-group">
+        <label for="dateFilter">Filtrar por data:</label>
+        <input type="date" id="dateFilter" name="dateFilter">
+      </div>
+    </div>
+
+    <table id="tableSales">
+      <thead>
+        <tr>
+          <th>Descrição</th>
+          <th>Valor cobrado</th>
+          <th>Lucro</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+
+    <div id="noDataFound"></div>
+  </div>
+
+  <span class="loader" id="loader"></span>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="../assets/js/global-scripts.js"></script>
+  <script type="module" src="./module-script.js"></script>
+</body>
+</html>

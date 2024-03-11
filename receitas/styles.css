@@ -51,11 +51,3 @@ div#formAddEquipamentToRevenue {
 .btn-text:hover {
   background-color: #9d85c6;
 }
-
-.btn-danger {
-  color: #792c2c;
-}
-
-.btn-success {
-  color: #2c7954;
-}

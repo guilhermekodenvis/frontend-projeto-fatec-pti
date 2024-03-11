@@ -1,8 +1,4 @@
-import {
-  showDangerToast,
-  showSuccessToast,
-  showWarningToast,
-} from "./../assets/js/toast.js";
+import { showDangerToast, showSuccessToast } from "./../assets/js/toast.js";
 import { db } from "./../assets/js/firebase-module.js";
 import {
   collection,

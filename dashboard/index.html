@@ -41,6 +41,49 @@
       </p>
 
       <form id="formRegisterNewSale">
+
+        <div class="input-group">
+          <label for="selectRevenues">Selecione uma receita:</label>
+          <select id="selectRevenues" name="selectRevenues" required>
+            <option value="null">Selecione</option>
+          </select>
+        </div>
+
+        <div id="formAddRevenueToSale">
+          <div class="input-group">
+            <label for="quantity">Quantidade vendida:</label>
+            <input type="text" id="quantity" name="quantity">
+          </div>
+
+          <div class="temp-form-button-group">
+            <button type="button" id="descartRevenueButton" class="btn btn-text btn-danger">
+              <i data-feather="x"></i>
+              Descartar
+            </button>
+            <button type="button" id="addRevenueButton" class="btn btn-text btn-success">
+              <i data-feather="check"></i>
+              Adicionar
+            </button>
+          </div>
+        </div>
+
+        <h2 style="margin-top: 48px;">Receitas:</h2>
+        <table id="tableRevenues" style="margin-top: 0px;">
+          <thead>
+            <tr>
+              <th>Qtd.</th>
+              <th>Descrição</th>
+              <th>Preço</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+
+        <b style="margin-top: 48px; display: inline-block;">Preço final:</b>
+        <span id="finalSalePrice"></span>
+
         <div class="register-sale-form-button-group">
           <button class="btn btn-secondary" type="button" id="btCancel">Cancelar</button>
           <button class="btn btn-primary" type="submit">Registrar venda</button>
