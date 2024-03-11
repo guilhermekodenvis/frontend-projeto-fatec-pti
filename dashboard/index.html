@@ -30,6 +30,28 @@
         </div>
       </div>
 
+      <div class="chart-container">
+        <div class="info-group">
+          <h2>
+            Receitas mais vendidas
+          </h2>
+          <p>As 5 receitas mais vendidas dos últimos 90 dias.</p>
+          <div>
+            <canvas id="topProductsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="info-group">
+          <h2>
+            Lucro geral
+          </h2>
+          <p>Margem de lucro e vendas dos últimos 6 meses.</p>
+          <div>
+            <canvas id="generalProfitChart"></canvas>
+          </div>
+        </div>
+      </div>
+
     </div>
     <div class="drawer drawer-close" id="drawerRegisterSale">
       <i data-feather="x" class="close-button" id="closeButton"></i>
@@ -94,10 +116,13 @@
     <div class="glass glass-close" id="glass"></div>
     <span class="loader" id="loader"></span>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="../assets/js/global-scripts.js"></script>
     <script type="module" src="./module-script.js"></script>
+    <script type="module" src="./top-products-graphic-module.js"></script>
+    <script type="module" src="./general-profit-chart-module.js"></script>
     <script src="./script.js"></script>
   </body>
 </html>

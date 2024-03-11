@@ -40,3 +40,34 @@ div#formAddRevenueToSale {
 .btn-text:hover {
   background-color: #9d85c6;
 }
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px;
+
+  padding: 24px;
+  background: #cbbee1;
+  border-radius: 16px;
+
+  width: fit-content;
+}
+
+#topProductsChart {
+  width: 360px !important;
+}
+
+#generalProfitChart {
+  width: 600px !important;
+  height: 300px !important;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: start;
+  gap: 16px;
+}
