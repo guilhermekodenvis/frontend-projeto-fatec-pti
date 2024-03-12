@@ -158,8 +158,8 @@ logoutButton.addEventListener("click", () => {
     });
 });
 
-window.addEventListener("load", () => {
-  const createdSidebar = createSidebar();
+window.addEventListener("load", async () => {
+  const createdSidebar = await createSidebar("equipaments");
   sidebar.appendChild(createdSidebar);
 });
 

@@ -172,8 +172,8 @@ logoutButton.addEventListener("click", () => {
     });
 });
 
-window.addEventListener("load", () => {
-  const createdSidebar = createSidebar();
+window.addEventListener("load", async () => {
+  const createdSidebar = await createSidebar("ingredients");
   sidebar.appendChild(createdSidebar);
 });
 

@@ -128,8 +128,8 @@ descartRevenueButton.addEventListener("click", () => {
   formAddRevenueToSale.style.display = "none";
 });
 
-window.addEventListener("load", () => {
-  const createdSidebar = createSidebar();
+window.addEventListener("load", async () => {
+  const createdSidebar = await createSidebar("dashboard");
   sidebar.appendChild(createdSidebar);
 });
 

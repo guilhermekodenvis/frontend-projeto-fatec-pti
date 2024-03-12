@@ -10,6 +10,7 @@ import {
   doc,
   addDoc,
   deleteDoc,
+  setDoc,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 let revenueCost = 0;
@@ -29,6 +30,7 @@ const tableEquipaments = document.getElementById("tableEquipaments");
 const formNewRevenue = document.getElementById("formNewRevenue");
 const totalCost = document.getElementById("totalCost");
 const suggestedPrice = document.getElementById("suggestedPrice");
+const editingRevenueId = document.getElementById("editingRevenueId");
 
 const getPriceWithMargin = (cost) => {
   return cost * 2.2;
@@ -157,7 +159,131 @@ const deleteRevenue = (revenueId) => {
 };
 
 const editRevenue = (revenueId) => {
-  console.log(revenueId);
+  loader.style.display = "block";
+  const drawerHeader = document.getElementById("drawerHeader");
+  const description = document.getElementById("description");
+  const preparingMode = document.getElementById("preparingMode");
+  const salePrice = document.getElementById("salePrice");
+
+  drawerHeader.innerText = "Editar receita 🧁";
+
+  editingRevenueId.value = revenueId;
+
+  const revenueRef = doc(db, "revenues", revenueId);
+  getDoc(revenueRef)
+    .then((doc) => {
+      if (doc.exists()) {
+        const revenue = doc.data();
+        description.value = revenue.description;
+        preparingMode.value = revenue.preparingMode;
+        salePrice.value = revenue.salePrice;
+
+        revenue.ingredients.forEach((ingredient) => {
+          addedIngredients.push(ingredient);
+
+          const newIngredientRow = document.createElement("tr");
+          newIngredientRow.id = `ingredientRow-${ingredient.id}`;
+          newIngredientRow.innerHTML = `
+          <td>${ingredient.description}</td>
+          <td>${ingredient.quantity}${showMesurementUnity(
+            ingredient.measurementUnity
+          )}</td>
+          <td>
+            <div class="btn-icon">
+              ${getTrashIngredientButton(ingredient.id).outerHTML}
+            </div>
+          </td>
+        `;
+
+          tableIngredients.appendChild(newIngredientRow);
+
+          const allDeleteButtons = document.querySelectorAll(
+            "[id^='deleteIngredient-']"
+          );
+
+          allDeleteButtons.forEach((button) => {
+            const ingredientId = button.id.split("-")[1];
+            button.parentNode.addEventListener("click", () => {
+              deleteIngredient(ingredientId);
+            });
+          });
+
+          const ingredientCost = getIngredientCost(
+            ingredient,
+            ingredient.quantity
+          );
+          revenueCost += ingredientCost;
+          totalCost.innerText = revenueCost.toLocaleString("pt-br", {
+            style: "currency",
+            currency: "BRL",
+          });
+
+          const ingredientWithMargin = getPriceWithMargin(ingredientCost);
+          priceWithMargin += ingredientWithMargin;
+          suggestedPrice.innerText = priceWithMargin.toLocaleString("pt-br", {
+            style: "currency",
+            currency: "BRL",
+          });
+        });
+
+        revenue.equipaments.forEach((equipament) => {
+          addedEquipaments.push(equipament);
+
+          const newEquipamentRow = document.createElement("tr");
+          newEquipamentRow.id = `equipamentRow-${equipament.id}`;
+          newEquipamentRow.innerHTML = `
+          <td>${equipament.description}</td>
+          <td>${equipament.minutes}</td>
+          <td>
+            <div class="btn-icon">
+              ${getTrashEquipamentButton(equipament.id).outerHTML}
+            </div>
+          </td>
+        `;
+
+          tableEquipaments.appendChild(newEquipamentRow);
+
+          const allDeleteButtons = document.querySelectorAll(
+            "[id^='deleteEquipament-']"
+          );
+
+          allDeleteButtons.forEach((button) => {
+            const equipamentId = button.id.split("-")[1];
+            button.parentNode.addEventListener("click", () => {
+              deleteEquipament(equipamentId);
+            });
+          });
+
+          const equipamentCost = getEquipamentCost(
+            equipament,
+            equipament.minutes
+          );
+          revenueCost += equipamentCost;
+          totalCost.innerText = revenueCost.toLocaleString("pt-br", {
+            style: "currency",
+            currency: "BRL",
+          });
+
+          const equipamentWithMargin = getPriceWithMargin(equipamentCost);
+          priceWithMargin += equipamentWithMargin;
+          suggestedPrice.innerText = priceWithMargin.toLocaleString("pt-br", {
+            style: "currency",
+            currency: "BRL",
+          });
+        });
+
+        btNewRevenue.click();
+      } else {
+        showDangerToast("Receita não encontrada.");
+      }
+
+      loader.style.display = "none";
+    })
+    .catch((error) => {
+      loader.style.display = "none";
+      console.error("Error getting document:", error);
+      showDangerToast("Erro interno no servidor. Tente novamente mais tarde.");
+    });
 };
 
 addIngredientButton.addEventListener("click", async () => {
@@ -387,6 +513,7 @@ formNewRevenue.addEventListener("submit", async (e) => {
   const description = e.target.description.value;
   const preparingMode = e.target.preparingMode.value;
   const salePrice = e.target.salePrice.value;
+  const editingRevenueId = e.target.editingRevenueId.value;
 
   const revenue = {
     description,
@@ -397,6 +524,29 @@ formNewRevenue.addEventListener("submit", async (e) => {
     priceWithMargin,
     salePrice,
   };
+
+  console.log(editingRevenueId);
+
+  if (editingRevenueId) {
+    const revenueRef = doc(db, "revenues", editingRevenueId);
+    setDoc(revenueRef, revenue)
+      .then(() => {
+        loader.style.display = "none";
+        showSuccessToast("Receita editada com sucesso!");
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      })
+      .catch((error) => {
+        loader.style.display = "none";
+        console.error(error);
+        showDangerToast(
+          "Erro ao editar a receita. Tente novamente mais tarde."
+        );
+      });
+
+    return;
+  }
 
   addDoc(collection(db, "revenues"), revenue)
     .then(() => {
@@ -415,8 +565,8 @@ formNewRevenue.addEventListener("submit", async (e) => {
     });
 });
 
-window.addEventListener("load", () => {
-  const createdSidebar = createSidebar();
+window.addEventListener("load", async () => {
+  const createdSidebar = await createSidebar("revenues");
   sidebar.appendChild(createdSidebar);
 });
 

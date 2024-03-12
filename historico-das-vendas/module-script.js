@@ -148,8 +148,8 @@ window.addEventListener("load", async function () {
   getSaleRows(querySnapshot);
 });
 
-window.addEventListener("load", () => {
-  const createdSidebar = createSidebar();
+window.addEventListener("load", async () => {
+  const createdSidebar = await createSidebar("dashboard");
   sidebar.appendChild(createdSidebar);
 });
 
