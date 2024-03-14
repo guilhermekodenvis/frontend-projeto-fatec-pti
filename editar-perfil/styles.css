@@ -1,0 +1,82 @@
+.edit-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: fit-content;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+
+  padding: 24px;
+  background: #cbbee1;
+  border-radius: 16px;
+}
+
+.edit-container h2 {
+  margin-bottom: 24px;
+  text-align: start;
+  width: 100%;
+}
+
+.edit-container form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+}
+
+.edit-container-form-button-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+
+  gap: 16px;
+  width: 100%;
+}
+
+.avatar-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.avatar-input img {
+  width: 124px;
+  height: 124px;
+  border-radius: 50%;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.avatar-input #avatarInput {
+  display: none;
+}
+
+.avatar-input .camera-button {
+  background: #130132;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+}
+
+.avatar-input .camera-button:hover {
+  background: #3a245e;
+}
+
+.avatar-input .camera-button svg {
+  color: #f8f4ff;
+}
+
+#notVerifiedEmail {
+  display: none;
+  color: #c93d3d;
+  text-align: end;
+  font-weight: 600;
+}

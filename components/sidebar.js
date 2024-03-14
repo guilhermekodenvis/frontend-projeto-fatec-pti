@@ -4,7 +4,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { db } from "../assets/js/firebase-module.js";
 import { sessionGetUser } from "../assets/js/session-controller.js";
-import { showDangerToast } from "../assets/js/toast.js";
 
 export const createSidebar = async (active) => {
   const homeSvg = feather.icons["home"].toSvg();
@@ -67,7 +66,7 @@ export const createSidebar = async (active) => {
       </p>
     </div>
     <div class="sidebar-footer">
-      <div class="user">
+      <div class="user" id="userProfileInfo">
         <img
           src="${userData.avatar || "../assets/img/avatar-placeholder.svg"}"
           alt="user"
@@ -85,6 +84,7 @@ export const createSidebar = async (active) => {
   const revenuesItem = sidebar.querySelector("#revenuesItem");
   const ingredientsItem = sidebar.querySelector("#ingredientsItem");
   const equipamentsItem = sidebar.querySelector("#equipamentsItem");
+  const userProfileInfo = sidebar.querySelector("#userProfileInfo");
 
   dashboardItem.addEventListener("click", () => {
     window.location.href = "/dashboard";
@@ -100,6 +100,10 @@ export const createSidebar = async (active) => {
 
   equipamentsItem.addEventListener("click", () => {
     window.location.href = "/equipamentos";
+  });
+
+  userProfileInfo.addEventListener("click", () => {
+    window.location.href = "/editar-perfil";
   });
 
   return sidebar;

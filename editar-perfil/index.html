@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CaaS - Editar perfil</title>
+
+  <link rel="stylesheet" href="./../assets/css/global-styles.css">
+  <link rel="stylesheet" href="./../assets/css/components.css">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <div id="sidebar"></div>
+    <div class="dashboard-content">
+      <div class="dashboard-header">
+        <div class="header-title">
+          <h1>Editar perfil</h1>
+          <div class="btn-icon">
+            <i data-feather="log-out" id="logoutButton"></i>
+          </div>
+        </div>
+        <p>Edite as informações do seu perfil.</p>
+      </div>
+
+      <div class="edit-container">
+        <h2>Editar informações pessoais</h2>
+        <form id="editProfile">
+
+          <div class="avatar-input">
+            <img src="../assets/img/avatar-placeholder.svg" alt="Avatar" id="avatar">
+            <input type="file" id="avatarInput" name="avatar" accept="image/*">
+            <div class="btn-icon camera-button" id="cameraButton">
+              <i data-feather="camera"></i>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="name">Seu nome completo:</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+
+          <div class="input-group">
+            <label for="email">Seu melhor email:</label>
+            <input type="email" id="email" name="email" required>
+            <span id="notVerifiedEmail">O email ainda não foi verificado. <a href="#" id="getVerifyLinkAnchor">Clique aqui</a> para reenviar o link de verificação.</span>
+          </div>
+
+          <div class="input-group">
+            <label for="bakeryName">Nome da confeitaria:</label>
+            <input type="text" id="bakeryName" name="bakeryName" required>
+          </div>
+
+          <div class="edit-container-form-button-group">
+            <button class="btn btn-secondary" type="button" id="btEditProfileCancel">Cancelar</button>
+            <button class="btn btn-primary" type="submit">Salvar alterações</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="edit-container">
+        <h2>Editar senha</h2>
+        <form id="editPassword">
+
+          <div class="input-group">
+            <label for="newPassword">Nova senha:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+          </div>
+
+          <div class="input-group">
+            <label for="confirmPassword">Confirme a nova senha:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+          </div>
+
+          <div class="edit-container-form-button-group">
+            <button class="btn btn-secondary" type="button" id="btEditPasswordCancel">Cancelar</button>
+            <button class="btn btn-primary" type="submit">Alterar senha</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <span class="loader" id="loader"></span>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="../assets/js/global-scripts.js"></script>
+    <script type="module" src="./module-script.js"></script>
+  </div>
+</body>
+</html>
