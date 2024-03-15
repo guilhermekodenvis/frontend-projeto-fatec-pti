@@ -1,7 +1,9 @@
 import { db } from "../assets/js/firebase-module.js";
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
+import { sessionLogout } from "../assets/js/session-controller.js";
 import { showMesurementUnity } from "../assets/js/show-mesurement-unity.js";
 import { showDangerToast, showSuccessToast } from "../assets/js/toast.js";
+import { validateLogin } from "../assets/js/validate-login.js";
 import { createSidebar } from "../components/sidebar.js";
 import {
   collection,
@@ -12,6 +14,8 @@ import {
   deleteDoc,
   setDoc,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+validateLogin();
 
 let revenueCost = 0;
 let priceWithMargin = 0;
@@ -31,6 +35,7 @@ const formNewRevenue = document.getElementById("formNewRevenue");
 const totalCost = document.getElementById("totalCost");
 const suggestedPrice = document.getElementById("suggestedPrice");
 const editingRevenueId = document.getElementById("editingRevenueId");
+const logoutButton = document.getElementById("logoutButton").parentElement;
 
 const getPriceWithMargin = (cost) => {
   return cost * 2.2;
@@ -129,6 +134,14 @@ const getEditButton = (revenueId) => {
   });
   const parser = new DOMParser();
   return parser.parseFromString(editSvg, "image/svg+xml").querySelector("svg");
+};
+
+const getViewButton = (revenueId) => {
+  const viewSvg = feather.icons["eye"].toSvg({
+    id: `viewRevenue-${revenueId}`,
+  });
+  const parser = new DOMParser();
+  return parser.parseFromString(viewSvg, "image/svg+xml").querySelector("svg");
 };
 
 const getTrashButton = (revenueId) => {
@@ -285,6 +298,18 @@ const editRevenue = (revenueId) => {
       showDangerToast("Erro interno no servidor. Tente novamente mais tarde.");
     });
 };
+
+const viewRevenue = (revenueId) => {
+  window.location.href = `/detalhes-da-receita/?id=${revenueId}`;
+};
+
+logoutButton.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  sessionLogout(() => {
+    loader.style.display = "none";
+  });
+});
 
 addIngredientButton.addEventListener("click", async () => {
   const quantity = document.getElementById("quantity");
@@ -585,6 +610,7 @@ window.addEventListener("load", async function () {
     const revenues = doc.data();
     const row = tableRevenues.insertRow(-1);
 
+    const viewButton = getViewButton(doc.id);
     const editButton = getEditButton(doc.id);
     const trashButton = getTrashButton(doc.id);
 
@@ -595,6 +621,9 @@ window.addEventListener("load", async function () {
       <td>${formatNumberToBRLCurrency(revenues.salePrice)}</td>
       <td>
         <div class="action-buttons-group">
+          <div class="btn-icon">
+            ${viewButton.outerHTML}
+          </div>
           <div class="btn-icon">
             ${editButton.outerHTML}
           </div>
@@ -610,6 +639,8 @@ window.addEventListener("load", async function () {
 
   const allEditButtons = document.querySelectorAll("[id^='editRevenue-']");
 
+  const allViewButtons = document.querySelectorAll("[id^='viewRevenue-']");
+
   allDeleteButtons.forEach((button) => {
     const revenueId = button.id.split("-")[1];
     button.parentNode.addEventListener("click", () => {
@@ -621,6 +652,13 @@ window.addEventListener("load", async function () {
     const revenueId = button.id.split("-")[1];
     button.parentNode.addEventListener("click", () => {
       editRevenue(revenueId);
+    });
+  });
+
+  allViewButtons.forEach((button) => {
+    const revenueId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      viewRevenue(revenueId);
     });
   });
 

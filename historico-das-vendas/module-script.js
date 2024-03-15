@@ -1,5 +1,7 @@
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
+import { sessionLogout } from "../assets/js/session-controller.js";
 import { showDangerToast } from "../assets/js/toast.js";
+import { validateLogin } from "../assets/js/validate-login.js";
 import { createSidebar } from "../components/sidebar.js";
 import { db } from "./../assets/js/firebase-module.js";
 import {
@@ -11,10 +13,13 @@ import {
   query,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
+validateLogin();
+
 const tableSales = document.getElementById("tableSales");
 const loader = document.getElementById("loader");
 const noDataFound = document.getElementById("noDataFound");
 const dateFilter = document.getElementById("dateFilter");
+const logoutButton = document.getElementById("logoutButton").parentElement;
 
 const getSaleDescription = (sale) => {
   let description = "";
@@ -107,6 +112,14 @@ const getSaleRows = (querySnapshot) => {
 
   loader.style.display = "none";
 };
+
+logoutButton.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  sessionLogout(() => {
+    loader.style.display = "none";
+  });
+});
 
 dateFilter.addEventListener("change", async (e) => {
   loader.style.display = "block";

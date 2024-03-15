@@ -9,14 +9,13 @@ import {
   getDoc,
   setDoc,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-import {
-  getAuth,
-  signOut,
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
 import { sessionLogout } from "../assets/js/session-controller.js";
 import { createSidebar } from "../components/sidebar.js";
 import { showMesurementUnity } from "../assets/js/show-mesurement-unity.js";
+import { validateLogin } from "../assets/js/validate-login.js";
+
+validateLogin();
 
 const formCreateNewIngredient = document.getElementById(
   "formCreateNewIngredient"
@@ -26,7 +25,7 @@ const loader = document.getElementById("loader");
 const noDataFound = document.getElementById("noDataFound");
 const btAddIngredient = document.getElementById("btAddIngredient");
 const ingredientEditingId = document.getElementById("ingredientEditingId");
-const logoutButton = document.getElementById("logoutButton");
+const logoutButton = document.getElementById("logoutButton").parentElement;
 
 const editIngredient = (ingredientId) => {
   loader.style.display = "block";
@@ -159,17 +158,9 @@ formCreateNewIngredient.addEventListener("submit", function (event) {
 logoutButton.addEventListener("click", () => {
   loader.style.display = "block";
 
-  const auth = getAuth();
-  signOut(auth)
-    .then(() => {
-      sessionLogout();
-      loader.style.display = "none";
-    })
-    .catch((error) => {
-      loader.style.display = "none";
-      console.error(error);
-      showDangerToast("Erro ao deslogar. Tente novamente mais tarde.");
-    });
+  sessionLogout(() => {
+    loader.style.display = "none";
+  });
 });
 
 window.addEventListener("load", async () => {

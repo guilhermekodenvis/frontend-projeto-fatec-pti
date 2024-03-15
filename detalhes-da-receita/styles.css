@@ -1,0 +1,128 @@
+#revenueInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  height: fit-content;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+
+  padding: 24px;
+  padding-left: 48px;
+  background: #cbbee1;
+  border-radius: 16px;
+
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    #e5daf8 0px,
+    #e5daf8 27px,
+    #130132 28px
+  );
+  box-shadow: -2px 4px 8px 2px #888;
+
+  position: relative;
+}
+
+.line {
+  line-height: 28px;
+  width: 540px !important;
+  text-align: justify !important;
+}
+
+#revenueInfo::before {
+  content: "";
+  width: 2px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 40px;
+  background-color: rgba(255, 0, 0, 0.6);
+}
+
+#revenueInfo h2 {
+  margin-bottom: 24px;
+  text-align: start;
+  width: 100%;
+  height: 56px;
+
+  display: flex;
+  align-items: flex-end;
+}
+
+#revenueInfo span {
+  margin-bottom: 28px;
+  text-align: start;
+  width: 100%;
+}
+
+#revenueInfo p {
+  margin-bottom: 16px;
+  text-align: start;
+  width: 100%;
+}
+
+#revenueInfo b {
+  width: 100%;
+  text-align: start;
+}
+
+#revenueInfo ul {
+  margin-bottom: 16px;
+}
+
+.indent-left {
+  margin-left: 48px;
+}
+
+.header-description {
+  margin-top: 11px;
+}
+
+.header-ingredients {
+  margin-top: 12px;
+}
+
+#description {
+  margin-top: 4px;
+}
+
+#ingredients {
+  margin-top: 4px;
+}
+
+.header-equipaments {
+  margin-top: 12px;
+}
+
+#equipaments {
+  margin-top: 4px;
+}
+
+.header-preparing-mode {
+  margin-top: 12px;
+}
+
+#preparingMode {
+  margin-top: 5px;
+}
+
+.header-financial {
+  margin-top: 14px;
+}
+
+.production-cost {
+  margin-top: 4px;
+}
+
+#bakeryName {
+  text-align: end !important;
+}
+
+#bakeryName {
+  font-family: "Dancing Script", cursive;
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: -4px;
+}

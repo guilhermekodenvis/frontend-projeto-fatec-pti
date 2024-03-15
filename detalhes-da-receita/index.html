@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CaaS - Detalhes da receita</title>
+
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./../assets/css/global-styles.css">
+  <link rel="stylesheet" href="./../assets/css/components.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <div id="sidebar"></div>
+    <div class="dashboard-content">
+      <div class="dashboard-header">
+        <div class="header-title">
+          <h1>Detalhes da receita</h1>
+          <div class="btn-icon">
+            <i data-feather="log-out" id="logoutButton"></i>
+          </div>
+        </div>
+        <p>Visualize os detalhes da receita cadastrada.</p>
+
+        <button class="btn btn-primary" style="margin-left: auto; margin-top: 24px;" id="printRevenueButton">Imprimir receita</button>
+      </div>
+
+
+      <div id="revenueInfo">
+        <h2 class="header-description">Descrição da receita:</h2>
+        <p id="description" class="indent-left line"></p>
+        <h2  class="header-ingredients">Ingredientes:</h2>
+        <div id="ingredients" class="indent-left"></div>
+        <h2  class="header-equipaments">Equipamentos:</h2>
+        <div id="equipaments" class="indent-left"></div>
+        <h2  class="header-preparing-mode">Modo de preparo:</h2>
+        <p id="preparingMode" class="indent-left"></p>
+        <h2  class="header-financial">Financeiro:</h2>
+        <b class="line production-cost">Custo de produção:</b>
+        <span id="revenueCost" class="indent-left line"></span>
+        <b class="line">Preço sugerido com margem (220%):</b>
+        <span id="priceWithMargin" class="indent-left line"></span>
+        <b class="line">Preço de venda:</b>
+        <span id="salePrice" class="indent-left line"></span>
+
+        <p id="bakeryName"></p>
+      </div>
+      <div id="noDataFound"></div>
+    </div>
+
+    
+  </div>
+
+  <span class="loader" id="loader"></span>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="../assets/js/global-scripts.js"></script>
+  <script type="module" src="./module-script.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>

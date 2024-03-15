@@ -4,6 +4,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { sessionLogin } from "./../assets/js/session-controller.js";
 import { showDangerToast } from "../assets/js/toast.js";
+import { validateLogin } from "../assets/js/validate-login.js";
+
+validateLogin();
 
 const formLogin = document.getElementById("formLogin");
 

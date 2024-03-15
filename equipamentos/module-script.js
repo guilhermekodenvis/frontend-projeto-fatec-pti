@@ -1,11 +1,9 @@
 import { db } from "../assets/js/firebase-module.js";
+import { sessionLogout } from "../assets/js/session-controller.js";
 import { showResourceName } from "../assets/js/show-resource-name.js";
+import { validateLogin } from "../assets/js/validate-login.js";
 import { createSidebar } from "../components/sidebar.js";
-import {
-  showDangerToast,
-  showSuccessToast,
-  showWarningToast,
-} from "./../assets/js/toast.js";
+import { showDangerToast, showSuccessToast } from "./../assets/js/toast.js";
 import {
   collection,
   addDoc,
@@ -16,10 +14,12 @@ import {
   setDoc,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
+validateLogin();
+
 const tableEquipaments = document.getElementById("tableEquipaments");
 const loader = document.getElementById("loader");
 const noDataFound = document.getElementById("noDataFound");
-const logoutButton = document.getElementById("logoutButton");
+const logoutButton = document.getElementById("logoutButton").parentElement;
 const formAddEquipament = document.getElementById("formAddEquipament");
 const equipamentEditingId = document.getElementById("equipamentEditingId");
 const btAddEquipament = document.getElementById("btAddEquipament");
@@ -90,6 +90,14 @@ const deleteEquipament = (equipamentId) => {
     });
 };
 
+logoutButton.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  sessionLogout(() => {
+    loader.style.display = "none";
+  });
+});
+
 formAddEquipament.addEventListener("submit", function (event) {
   event.preventDefault();
 
@@ -139,22 +147,6 @@ formAddEquipament.addEventListener("submit", function (event) {
 
       console.error(error);
       showDangerToast("Erro ao criar um usuário. Tente novamente mais tarde.");
-    });
-});
-
-logoutButton.addEventListener("click", () => {
-  loader.style.display = "block";
-
-  const auth = getAuth();
-  signOut(auth)
-    .then(() => {
-      sessionLogout();
-      loader.style.display = "none";
-    })
-    .catch((error) => {
-      loader.style.display = "none";
-      console.error(error);
-      showDangerToast("Erro ao deslogar. Tente novamente mais tarde.");
     });
 });
 

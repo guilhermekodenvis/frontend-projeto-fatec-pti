@@ -1,21 +1,35 @@
 import { showSuccessToast, showWarningToast } from "./toast.js";
+import {
+  getAuth,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
 export const sessionLogin = (user) => {
-  sessionStorage.setItem("CaaS@user", JSON.stringify(user))
-  showSuccessToast("Bem-vindo de volta!")
+  sessionStorage.setItem("CaaS@user", JSON.stringify(user));
+  showSuccessToast("Bem-vindo de volta!");
   setTimeout(() => {
-    window.location.href = "/dashboard"
+    window.location.href = "/dashboard";
   }, 2000);
-}
+};
 
-export const sessionLogout = () => {
-  sessionStorage.removeItem("CaaS@user")
-  showWarningToast("Até mais! Volte sempre.")
-  setTimeout(() => {
-    window.location.href = "/"
-  }, 2000);
-}
+export const sessionLogout = (stopLoader, logoutMessage) => {
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => {
+      sessionStorage.removeItem("CaaS@user");
+      showWarningToast(logoutMessage || "Até mais! Volte sempre.");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+      stopLoader();
+    })
+    .catch((error) => {
+      stopLoader();
+      console.error(error);
+      showDangerToast("Erro ao deslogar. Tente novamente mais tarde.");
+    });
+};
 
 export const sessionGetUser = () => {
-  return JSON.parse(sessionStorage.getItem("CaaS@user"))
-}
+  return JSON.parse(sessionStorage.getItem("CaaS@user"));
+};

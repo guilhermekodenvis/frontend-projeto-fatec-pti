@@ -1,6 +1,8 @@
 import { db } from "../assets/js/firebase-module.js";
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
+import { sessionLogout } from "../assets/js/session-controller.js";
 import { showSuccessToast } from "../assets/js/toast.js";
+import { validateLogin } from "../assets/js/validate-login.js";
 import { createSidebar } from "../components/sidebar.js";
 import {
   collection,
@@ -10,6 +12,8 @@ import {
   addDoc,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
+validateLogin();
+
 const loader = document.getElementById("loader");
 const selectRevenues = document.getElementById("selectRevenues");
 const btRegisterSale = document.getElementById("btRegisterSale");
@@ -18,6 +22,7 @@ const addRevenueButton = document.getElementById("addRevenueButton");
 const tableRevenues = document.getElementById("tableRevenues");
 const finalSalePrice = document.getElementById("finalSalePrice");
 const formRegisterNewSale = document.getElementById("formRegisterNewSale");
+const logoutButton = document.getElementById("logoutButton").parentElement;
 const addedRevenues = [];
 let salesCost = 0;
 
@@ -46,6 +51,14 @@ const deleteRevenue = (revenueId) => {
   const revenueRow = document.getElementById(`revenueRow-${revenueId}`);
   revenueRow.remove();
 };
+
+logoutButton.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  sessionLogout(() => {
+    loader.style.display = "none";
+  });
+});
 
 formRegisterNewSale.addEventListener("submit", async (e) => {
   e.preventDefault();

@@ -147,6 +147,7 @@ editProfile.addEventListener("submit", (event) => {
   const name = event.target.elements.name.value;
   const email = event.target.elements.email.value;
   const bakeryName = event.target.elements.bakeryName.value;
+  const avatarUrl = document.getElementById("avatar").src;
 
   console.log(auth.currentUser.email);
 
@@ -155,6 +156,7 @@ editProfile.addEventListener("submit", (event) => {
     name,
     bakeryName,
     email: auth.currentUser.email,
+    avatar: avatarUrl,
   })
     .then(() => {
       showSuccessToast("Perfil editado com sucesso!");
@@ -168,6 +170,7 @@ editProfile.addEventListener("submit", (event) => {
               name,
               bakeryName,
               email,
+              avatar: avatarUrl,
             })
               .then(() => {
                 showSuccessToast("Email alterado com sucesso!");
