@@ -14,6 +14,10 @@ import { sessionLogout } from "../assets/js/session-controller.js";
 import { createSidebar } from "../components/sidebar.js";
 import { showMesurementUnity } from "../assets/js/show-mesurement-unity.js";
 import { validateLogin } from "../assets/js/validate-login.js";
+import { numberMaskInput } from "../assets/js/number-mask-input.js";
+import { moneyMaskInput } from "../assets/js/money-mask-input.js";
+import { saveMoneyAsNumber } from "../assets/js/save-money-as-number.js";
+import { saveNumberStringAsNumber } from "../assets/js/save-number-string-as-number.js";
 
 validateLogin();
 
@@ -26,6 +30,8 @@ const noDataFound = document.getElementById("noDataFound");
 const btAddIngredient = document.getElementById("btAddIngredient");
 const ingredientEditingId = document.getElementById("ingredientEditingId");
 const logoutButton = document.getElementById("logoutButton").parentElement;
+const quantityInItem = document.getElementById("quantityInItem");
+const price = document.getElementById("price");
 
 const editIngredient = (ingredientId) => {
   loader.style.display = "block";
@@ -97,6 +103,14 @@ const getTrashButton = (ingredientId) => {
   return parser.parseFromString(trashSvg, "image/svg+xml").querySelector("svg");
 };
 
+quantityInItem.addEventListener("input", (event) => {
+  numberMaskInput(event);
+});
+
+price.addEventListener("input", (event) => {
+  moneyMaskInput(event);
+});
+
 formCreateNewIngredient.addEventListener("submit", function (event) {
   event.preventDefault();
 
@@ -104,8 +118,10 @@ formCreateNewIngredient.addEventListener("submit", function (event) {
 
   const description = event.target.elements.description.value;
   const measurementUnity = event.target.elements.measurementUnity.value;
-  const price = Number(event.target.elements.price.value);
-  const quantityInItem = Number(event.target.elements.quantityInItem.value);
+  const price = saveMoneyAsNumber(event.target.elements.price.value);
+  const quantityInItem = saveNumberStringAsNumber(
+    event.target.elements.quantityInItem.value
+  );
 
   if (ingredientEditingId.value) {
     const ingredientRef = doc(db, "ingredients", ingredientEditingId.value);

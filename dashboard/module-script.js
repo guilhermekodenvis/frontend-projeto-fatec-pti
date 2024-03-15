@@ -1,5 +1,7 @@
 import { db } from "../assets/js/firebase-module.js";
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
+import { numberMaskInput } from "../assets/js/number-mask-input.js";
+import { saveNumberStringAsNumber } from "../assets/js/save-number-string-as-number.js";
 import { sessionLogout } from "../assets/js/session-controller.js";
 import { showSuccessToast } from "../assets/js/toast.js";
 import { validateLogin } from "../assets/js/validate-login.js";
@@ -22,6 +24,7 @@ const addRevenueButton = document.getElementById("addRevenueButton");
 const tableRevenues = document.getElementById("tableRevenues");
 const finalSalePrice = document.getElementById("finalSalePrice");
 const formRegisterNewSale = document.getElementById("formRegisterNewSale");
+const quantity = document.getElementById("quantity");
 const logoutButton = document.getElementById("logoutButton").parentElement;
 const addedRevenues = [];
 let salesCost = 0;
@@ -51,6 +54,10 @@ const deleteRevenue = (revenueId) => {
   const revenueRow = document.getElementById(`revenueRow-${revenueId}`);
   revenueRow.remove();
 };
+
+quantity.addEventListener("input", (e) => {
+  numberMaskInput(e);
+});
 
 logoutButton.addEventListener("click", () => {
   loader.style.display = "block";
@@ -163,7 +170,7 @@ addRevenueButton.addEventListener("click", async () => {
 
   addedRevenues.push({
     ...revenueData,
-    quantity: quantity.value,
+    quantity: saveNumberStringAsNumber(quantity.value),
     id: revenueId,
   });
 
@@ -191,7 +198,8 @@ addRevenueButton.addEventListener("click", async () => {
     });
   });
 
-  const revenueCost = revenueData.salePrice * quantity.value;
+  const revenueCost =
+    revenueData.salePrice * saveNumberStringAsNumber(quantity.value);
   salesCost += revenueCost;
   finalSalePrice.innerText = salesCost.toLocaleString("pt-br", {
     style: "currency",

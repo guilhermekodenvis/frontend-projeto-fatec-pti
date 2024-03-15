@@ -1,5 +1,9 @@
 import { db } from "../assets/js/firebase-module.js";
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
+import { moneyMaskInput } from "../assets/js/money-mask-input.js";
+import { numberMaskInput } from "../assets/js/number-mask-input.js";
+import { saveMoneyAsNumber } from "../assets/js/save-money-as-number.js";
+import { saveNumberStringAsNumber } from "../assets/js/save-number-string-as-number.js";
 import { sessionLogout } from "../assets/js/session-controller.js";
 import { showMesurementUnity } from "../assets/js/show-mesurement-unity.js";
 import { showDangerToast, showSuccessToast } from "../assets/js/toast.js";
@@ -36,6 +40,9 @@ const totalCost = document.getElementById("totalCost");
 const suggestedPrice = document.getElementById("suggestedPrice");
 const editingRevenueId = document.getElementById("editingRevenueId");
 const logoutButton = document.getElementById("logoutButton").parentElement;
+const quantity = document.getElementById("quantity");
+const minutes = document.getElementById("minutes");
+const salePrice = document.getElementById("salePrice");
 
 const getPriceWithMargin = (cost) => {
   return cost * 2.2;
@@ -303,6 +310,18 @@ const viewRevenue = (revenueId) => {
   window.location.href = `/detalhes-da-receita/?id=${revenueId}`;
 };
 
+quantity.addEventListener("input", (event) => {
+  numberMaskInput(event);
+});
+
+minutes.addEventListener("input", (event) => {
+  numberMaskInput(event);
+});
+
+salePrice.addEventListener("input", (event) => {
+  moneyMaskInput(event);
+});
+
 logoutButton.addEventListener("click", () => {
   loader.style.display = "block";
 
@@ -330,7 +349,7 @@ addIngredientButton.addEventListener("click", async () => {
 
   addedIngredients.push({
     ...ingredientData,
-    quantity: quantity.value,
+    quantity: saveNumberStringAsNumber(quantity.value),
     id: ingredientId,
   });
 
@@ -361,7 +380,10 @@ addIngredientButton.addEventListener("click", async () => {
     });
   });
 
-  const ingredientCost = getIngredientCost(ingredientData, quantity.value);
+  const ingredientCost = getIngredientCost(
+    ingredientData,
+    saveNumberStringAsNumber(quantity.value)
+  );
   revenueCost += ingredientCost;
   totalCost.innerText = revenueCost.toLocaleString("pt-br", {
     style: "currency",
@@ -400,7 +422,7 @@ addEquipamentButton.addEventListener("click", async () => {
 
   addedEquipaments.push({
     ...equipamentData,
-    minutes: minutes.value,
+    minutes: saveNumberStringAsNumber(minutes.value),
     id: equipamentId,
   });
 
@@ -408,7 +430,7 @@ addEquipamentButton.addEventListener("click", async () => {
   newEquipamentRow.id = `equipamentRow-${equipamentId}`;
   newEquipamentRow.innerHTML = `
     <td>${equipamentData.description}</td>
-    <td>${minutes.value}</td>
+    <td>${minutes.value} min.</td>
     <td>
       <div class="btn-icon">
         ${getTrashEquipamentButton(equipamentId).outerHTML}
@@ -429,7 +451,10 @@ addEquipamentButton.addEventListener("click", async () => {
     });
   });
 
-  const equipamentCost = getEquipamentCost(equipamentData, minutes.value);
+  const equipamentCost = getEquipamentCost(
+    equipamentData,
+    saveNumberStringAsNumber(minutes.value)
+  );
   revenueCost += equipamentCost;
   totalCost.innerText = revenueCost.toLocaleString("pt-br", {
     style: "currency",
@@ -547,10 +572,8 @@ formNewRevenue.addEventListener("submit", async (e) => {
     preparingMode,
     revenueCost,
     priceWithMargin,
-    salePrice,
+    salePrice: saveMoneyAsNumber(salePrice),
   };
-
-  console.log(editingRevenueId);
 
   if (editingRevenueId) {
     const revenueRef = doc(db, "revenues", editingRevenueId);
