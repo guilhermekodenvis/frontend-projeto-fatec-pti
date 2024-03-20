@@ -1,5 +1,6 @@
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
 import { sessionLogout } from "../assets/js/session-controller.js";
+import { showNumberAsBrlNumber } from "../assets/js/show-number-as-brl-number.js";
 import { showDangerToast } from "../assets/js/toast.js";
 import { validateLogin } from "../assets/js/validate-login.js";
 import { createSidebar } from "../components/sidebar.js";
@@ -25,7 +26,9 @@ const getSaleDescription = (sale) => {
   let description = "";
 
   sale.revenues.forEach((revenue) => {
-    description += `${revenue.quantity}x ${revenue.description}, `;
+    description += `${showNumberAsBrlNumber(revenue.quantity)}x ${
+      revenue.description
+    }, `;
   });
 
   description = description.slice(0, -2);

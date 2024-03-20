@@ -25,8 +25,15 @@ const tableRevenues = document.getElementById("tableRevenues");
 const finalSalePrice = document.getElementById("finalSalePrice");
 const formRegisterNewSale = document.getElementById("formRegisterNewSale");
 const quantity = document.getElementById("quantity");
+const drawerRegisterSale = document.getElementById("drawerRegisterSale");
+const closeButton = document.getElementById("closeButton");
+const glass = document.getElementById("glass");
+const drawerHeader = document.getElementById("drawerHeader");
+const btCancel = document.getElementById("btCancel");
+const btGoToSalesHistory = document.getElementById("btGoToSalesHistory");
 const logoutButton = document.getElementById("logoutButton").parentElement;
-const addedRevenues = [];
+const formAddRevenueToSale = document.getElementById("formAddRevenueToSale");
+let addedRevenues = [];
 let salesCost = 0;
 
 const getTrashRevenueButton = (revenueId) => {
@@ -54,6 +61,47 @@ const deleteRevenue = (revenueId) => {
   const revenueRow = document.getElementById(`revenueRow-${revenueId}`);
   revenueRow.remove();
 };
+
+const toggleDrawer = () => {
+  drawerRegisterSale.classList.toggle("drawer-close");
+  drawerRegisterSale.classList.toggle("drawer-open");
+  glass.classList.toggle("glass-close");
+  glass.classList.toggle("glass-open");
+};
+
+const closeDrawer = () => {
+  drawerHeader.innerText = "Registrar venda 💸";
+
+  selectRevenues.value = "null";
+  selectRevenues.innerHTML = "<option value='null'>Selecione</option>";
+  quantity.value = "";
+  tableRevenues.innerHTML = `
+    <tr>
+      <th>Qtd.</th>
+      <th>Descrição</th>
+      <th>Preço</th>
+      <th>Ação</th>
+    </tr>
+  `;
+  addedRevenues = [];
+  salesCost = 0;
+  finalSalePrice.innerText = "R$ 0,00";
+  formAddRevenueToSale.style.display = "none";
+
+  toggleDrawer();
+};
+
+btGoToSalesHistory.addEventListener("click", () => {
+  window.location.href = "/historico-das-vendas";
+});
+
+btRegisterSale.addEventListener("click", toggleDrawer);
+
+glass.addEventListener("click", closeDrawer);
+
+closeButton.addEventListener("click", closeDrawer);
+
+btCancel.addEventListener("click", closeDrawer);
 
 quantity.addEventListener("input", (e) => {
   numberMaskInput(e);
@@ -100,7 +148,6 @@ formRegisterNewSale.addEventListener("submit", async (e) => {
 
 selectRevenues.addEventListener("change", async (e) => {
   const revenueId = e.target.value;
-  const formAddRevenueToSale = document.getElementById("formAddRevenueToSale");
 
   if (revenueId === "null") {
     formAddRevenueToSale.style.display = "none";
@@ -138,7 +185,6 @@ btRegisterSale.addEventListener("click", async () => {
 });
 
 descartRevenueButton.addEventListener("click", () => {
-  const formAddRevenueToSale = document.getElementById("formAddRevenueToSale");
   const selectRevenues = document.getElementById("selectRevenues");
   const quantity = document.getElementById("quantity");
 
@@ -161,7 +207,6 @@ addRevenueButton.addEventListener("click", async () => {
     return;
   }
 
-  const formAddRevenueToSale = document.getElementById("formAddRevenueToSale");
   const selectRevenues = document.getElementById("selectRevenues");
 
   const revenueId = selectRevenues.value;

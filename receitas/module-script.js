@@ -6,6 +6,7 @@ import { saveMoneyAsNumber } from "../assets/js/save-money-as-number.js";
 import { saveNumberStringAsNumber } from "../assets/js/save-number-string-as-number.js";
 import { sessionLogout } from "../assets/js/session-controller.js";
 import { showMesurementUnity } from "../assets/js/show-mesurement-unity.js";
+import { showNumberAsBrlNumber } from "../assets/js/show-number-as-brl-number.js";
 import { showDangerToast, showSuccessToast } from "../assets/js/toast.js";
 import { validateLogin } from "../assets/js/validate-login.js";
 import { createSidebar } from "../components/sidebar.js";
@@ -25,12 +26,13 @@ let revenueCost = 0;
 let priceWithMargin = 0;
 const btNewRevenue = document.getElementById("btNewRevenue");
 const loader = document.getElementById("loader");
+const drawerNewRevenue = document.getElementById("drawerNewRevenue");
 const selectIngredients = document.getElementById("selectIngredients");
 const selectEquipaments = document.getElementById("selectEquipaments");
 const addIngredientButton = document.getElementById("addIngredientButton");
 const addEquipamentButton = document.getElementById("addEquipamentButton");
-const addedIngredients = [];
-const addedEquipaments = [];
+let addedIngredients = [];
+let addedEquipaments = [];
 const tableRevenues = document.getElementById("tableRevenues");
 const noDataFound = document.getElementById("noDataFound");
 const tableIngredients = document.getElementById("tableIngredients");
@@ -42,7 +44,74 @@ const editingRevenueId = document.getElementById("editingRevenueId");
 const logoutButton = document.getElementById("logoutButton").parentElement;
 const quantity = document.getElementById("quantity");
 const minutes = document.getElementById("minutes");
+const drawerHeader = document.getElementById("drawerHeader");
 const salePrice = document.getElementById("salePrice");
+const btCancel = document.getElementById("btCancel");
+const closeButton = document.getElementById("closeButton");
+const glass = document.getElementById("glass");
+const description = document.getElementById("description");
+const preparingMode = document.getElementById("preparingMode");
+const descartIngredientButton = document.getElementById(
+  "descartIngredientButton"
+);
+const descartEquipamentButton = document.getElementById(
+  "descartEquipamentButton"
+);
+const formAddIngredientToRevenue = document.getElementById(
+  "formAddIngredientToRevenue"
+);
+const formAddEquipamentToRevenue = document.getElementById(
+  "formAddEquipamentToRevenue"
+);
+
+const toggleDrawer = () => {
+  drawerNewRevenue.classList.toggle("drawer-close");
+  drawerNewRevenue.classList.toggle("drawer-open");
+  glass.classList.toggle("glass-close");
+  glass.classList.toggle("glass-open");
+};
+
+const closeDrawer = () => {
+  drawerHeader.innerText = "Registrar venda 💸";
+  description.value = "";
+  preparingMode.value = "";
+  salePrice.value = "";
+  editingRevenueId.value = "";
+  addedIngredients = [];
+  addedEquipaments = [];
+  revenueCost = 0;
+  priceWithMargin = 0;
+  tableIngredients.innerHTML = `
+    <tr>
+      <th>Descrição</th>
+      <th>Qtd.</th>
+      <th>Ação</th>
+    </tr>
+  `;
+  tableEquipaments.innerHTML = `
+    <tr>
+      <th>Descrição</th>
+      <th>Tempo</th>
+      <th>Ação</th>
+    </tr>
+  `;
+  totalCost.innerText = "R$ 0,00";
+  suggestedPrice.innerText = "R$ 0,00";
+  selectIngredients.value = "null";
+  selectIngredients.innerHTML = `
+    <option value="null">Selecione</option>
+  `;
+  selectEquipaments.value = "null";
+  selectEquipaments.innerHTML = `
+    <option value="null">Selecione</option>
+  `;
+  quantity.value = "";
+  minutes.value = "";
+  formAddIngredientToRevenue.style.display = "none";
+  formAddEquipamentToRevenue.style.display = "none";
+
+  toggleDrawer();
+};
 
 const getPriceWithMargin = (cost) => {
   return cost * 2.2;
@@ -56,17 +125,11 @@ const deleteIngredient = (ingredientId) => {
 
   const ingredientCost = getIngredientCost(ingredient, ingredient.quantity);
   revenueCost -= ingredientCost;
-  totalCost.innerText = revenueCost.toLocaleString("pt-br", {
-    style: "currency",
-    currency: "BRL",
-  });
+  totalCost.innerText = formatNumberToBRLCurrency(revenueCost);
 
   const ingredientWithMargin = getPriceWithMargin(ingredientCost);
   priceWithMargin -= ingredientWithMargin;
-  suggestedPrice.innerText = priceWithMargin.toLocaleString("pt-br", {
-    style: "currency",
-    currency: "BRL",
-  });
+  suggestedPrice.innerText = formatNumberToBRLCurrency(priceWithMargin);
 
   addedIngredients.splice(ingredientIndex, 1);
   const ingredientRow = document.getElementById(
@@ -88,17 +151,11 @@ const deleteEquipament = (equipamentId) => {
 
   const equipamentCost = getEquipamentCost(equipament, equipament.minutes);
   revenueCost -= equipamentCost;
-  totalCost.innerText = revenueCost.toLocaleString("pt-br", {
-    style: "currency",
-    currency: "BRL",
-  });
+  totalCost.innerText = formatNumberToBRLCurrency(revenueCost);
 
   const equipamentWithMargin = getPriceWithMargin(equipamentCost);
   priceWithMargin -= equipamentWithMargin;
-  suggestedPrice.innerText = priceWithMargin.toLocaleString("pt-br", {
-    style: "currency",
-    currency: "BRL",
-  });
+  suggestedPrice.innerText = formatNumberToBRLCurrency(priceWithMargin);
 };
 
 const getTrashIngredientButton = (ingredientId) => {
@@ -180,7 +237,6 @@ const deleteRevenue = (revenueId) => {
 
 const editRevenue = (revenueId) => {
   loader.style.display = "block";
-  const drawerHeader = document.getElementById("drawerHeader");
   const description = document.getElementById("description");
   const preparingMode = document.getElementById("preparingMode");
   const salePrice = document.getElementById("salePrice");
@@ -196,7 +252,7 @@ const editRevenue = (revenueId) => {
         const revenue = doc.data();
         description.value = revenue.description;
         preparingMode.value = revenue.preparingMode;
-        salePrice.value = revenue.salePrice;
+        salePrice.value = formatNumberToBRLCurrency(revenue.salePrice);
 
         revenue.ingredients.forEach((ingredient) => {
           addedIngredients.push(ingredient);
@@ -205,9 +261,9 @@ const editRevenue = (revenueId) => {
           newIngredientRow.id = `ingredientRow-${ingredient.id}`;
           newIngredientRow.innerHTML = `
           <td>${ingredient.description}</td>
-          <td>${ingredient.quantity}${showMesurementUnity(
-            ingredient.measurementUnity
-          )}</td>
+          <td>${showNumberAsBrlNumber(
+            ingredient.quantity
+          )} ${showMesurementUnity(ingredient.measurementUnity)}</td>
           <td>
             <div class="btn-icon">
               ${getTrashIngredientButton(ingredient.id).outerHTML}
@@ -232,18 +288,11 @@ const editRevenue = (revenueId) => {
             ingredient,
             ingredient.quantity
           );
+
           revenueCost += ingredientCost;
-          totalCost.innerText = revenueCost.toLocaleString("pt-br", {
-            style: "currency",
-            currency: "BRL",
-          });
 
           const ingredientWithMargin = getPriceWithMargin(ingredientCost);
           priceWithMargin += ingredientWithMargin;
-          suggestedPrice.innerText = priceWithMargin.toLocaleString("pt-br", {
-            style: "currency",
-            currency: "BRL",
-          });
         });
 
         revenue.equipaments.forEach((equipament) => {
@@ -253,7 +302,7 @@ const editRevenue = (revenueId) => {
           newEquipamentRow.id = `equipamentRow-${equipament.id}`;
           newEquipamentRow.innerHTML = `
           <td>${equipament.description}</td>
-          <td>${equipament.minutes}</td>
+          <td>${showNumberAsBrlNumber(equipament.minutes)} min.</td>
           <td>
             <div class="btn-icon">
               ${getTrashEquipamentButton(equipament.id).outerHTML}
@@ -279,20 +328,15 @@ const editRevenue = (revenueId) => {
             equipament.minutes
           );
           revenueCost += equipamentCost;
-          totalCost.innerText = revenueCost.toLocaleString("pt-br", {
-            style: "currency",
-            currency: "BRL",
-          });
 
           const equipamentWithMargin = getPriceWithMargin(equipamentCost);
           priceWithMargin += equipamentWithMargin;
-          suggestedPrice.innerText = priceWithMargin.toLocaleString("pt-br", {
-            style: "currency",
-            currency: "BRL",
-          });
         });
 
         btNewRevenue.click();
+
+        totalCost.innerText = formatNumberToBRLCurrency(revenueCost);
+        suggestedPrice.innerText = formatNumberToBRLCurrency(priceWithMargin);
       } else {
         showDangerToast("Receita não encontrada.");
       }
@@ -309,6 +353,38 @@ const editRevenue = (revenueId) => {
 const viewRevenue = (revenueId) => {
   window.location.href = `/detalhes-da-receita/?id=${revenueId}`;
 };
+
+btNewRevenue.addEventListener("click", toggleDrawer);
+
+glass.addEventListener("click", closeDrawer);
+
+closeButton.addEventListener("click", closeDrawer);
+
+btCancel.addEventListener("click", closeDrawer);
+
+descartIngredientButton.addEventListener("click", () => {
+  const selectIngredients = document.getElementById("selectIngredients");
+  const quantity = document.getElementById("quantity");
+  const quantityMeasurementUnity = document.getElementById(
+    "quantityMeasurementUnity"
+  );
+
+  selectIngredients.value = "null";
+  quantity.value = "";
+  quantityMeasurementUnity.innerText = "";
+
+  formAddIngredientToRevenue.style.display = "none";
+});
+
+descartEquipamentButton.addEventListener("click", () => {
+  const selectEquipaments = document.getElementById("selectEquipaments");
+  const minutes = document.getElementById("minutes");
+
+  selectEquipaments.value = "null";
+  minutes.value = "";
+
+  formAddEquipamentToRevenue.style.display = "none";
+});
 
 quantity.addEventListener("input", (event) => {
   numberMaskInput(event);
@@ -338,9 +414,6 @@ addIngredientButton.addEventListener("click", async () => {
     return;
   }
 
-  const formAddIngredientToRevenue = document.getElementById(
-    "formAddIngredientToRevenue"
-  );
   const selectIngredients = document.getElementById("selectIngredients");
 
   const ingredientId = selectIngredients.value;
@@ -357,7 +430,7 @@ addIngredientButton.addEventListener("click", async () => {
   newIngredientRow.id = `ingredientRow-${ingredientId}`;
   newIngredientRow.innerHTML = `
     <td>${ingredientData.description}</td>
-    <td>${quantity.value}${showMesurementUnity(
+    <td>${quantity.value} ${showMesurementUnity(
     ingredientData.measurementUnity
   )}</td>
     <td>
@@ -385,17 +458,11 @@ addIngredientButton.addEventListener("click", async () => {
     saveNumberStringAsNumber(quantity.value)
   );
   revenueCost += ingredientCost;
-  totalCost.innerText = revenueCost.toLocaleString("pt-br", {
-    style: "currency",
-    currency: "BRL",
-  });
+  totalCost.innerText = formatNumberToBRLCurrency(revenueCost);
 
   const ingredientWithMargin = getPriceWithMargin(ingredientCost);
   priceWithMargin += ingredientWithMargin;
-  suggestedPrice.innerText = priceWithMargin.toLocaleString("pt-br", {
-    style: "currency",
-    currency: "BRL",
-  });
+  suggestedPrice.innerText = formatNumberToBRLCurrency(priceWithMargin);
 
   selectIngredients.value = "null";
   quantityMeasurementUnity.innerText = "";
@@ -411,9 +478,6 @@ addEquipamentButton.addEventListener("click", async () => {
     return;
   }
 
-  const formAddEquipamentToRevenue = document.getElementById(
-    "formAddEquipamentToRevenue"
-  );
   const selectEquipaments = document.getElementById("selectEquipaments");
 
   const equipamentId = selectEquipaments.value;
@@ -430,7 +494,7 @@ addEquipamentButton.addEventListener("click", async () => {
   newEquipamentRow.id = `equipamentRow-${equipamentId}`;
   newEquipamentRow.innerHTML = `
     <td>${equipamentData.description}</td>
-    <td>${minutes.value} min.</td>
+    <td>${showNumberAsBrlNumber(minutes.value)} min.</td>
     <td>
       <div class="btn-icon">
         ${getTrashEquipamentButton(equipamentId).outerHTML}
@@ -456,17 +520,11 @@ addEquipamentButton.addEventListener("click", async () => {
     saveNumberStringAsNumber(minutes.value)
   );
   revenueCost += equipamentCost;
-  totalCost.innerText = revenueCost.toLocaleString("pt-br", {
-    style: "currency",
-    currency: "BRL",
-  });
+  totalCost.innerText = formatNumberToBRLCurrency(revenueCost);
 
   const equipamentWithMargin = getPriceWithMargin(equipamentCost);
   priceWithMargin += equipamentWithMargin;
-  suggestedPrice.innerText = priceWithMargin.toLocaleString("pt-br", {
-    style: "currency",
-    currency: "BRL",
-  });
+  suggestedPrice.innerText = formatNumberToBRLCurrency(priceWithMargin);
 
   selectEquipaments.value = "null";
   minutes.value = "";
@@ -475,9 +533,7 @@ addEquipamentButton.addEventListener("click", async () => {
 
 selectIngredients.addEventListener("change", async (e) => {
   const ingredientId = e.target.value;
-  const formAddIngredientToRevenue = document.getElementById(
-    "formAddIngredientToRevenue"
-  );
+
   const quantityMeasurementUnity = document.getElementById(
     "quantityMeasurementUnity"
   );
@@ -500,9 +556,6 @@ selectIngredients.addEventListener("change", async (e) => {
 
 selectEquipaments.addEventListener("change", async (e) => {
   const equipamentId = e.target.value;
-  const formAddEquipamentToRevenue = document.getElementById(
-    "formAddEquipamentToRevenue"
-  );
 
   if (equipamentId === "null") {
     formAddEquipamentToRevenue.style.display = "none";

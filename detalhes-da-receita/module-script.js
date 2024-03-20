@@ -11,6 +11,7 @@ import {
   sessionLogout,
 } from "../assets/js/session-controller.js";
 import { validateLogin } from "../assets/js/validate-login.js";
+import { showNumberAsBrlNumber } from "../assets/js/show-number-as-brl-number.js";
 
 validateLogin();
 
@@ -70,11 +71,11 @@ window.addEventListener("load", async () => {
   revenueData.ingredients.forEach((ingredient, index) => {
     const li = document.createElement("li");
     li.classList.add("line");
-    li.innerHTML = `${ingredient.quantity}${showMesurementUnity(
-      ingredient.measurementUnity
-    )} de ${ingredient.description}${
-      index === revenueData.ingredients.length - 1 ? "." : ";"
-    }`;
+    li.innerHTML = `${showNumberAsBrlNumber(
+      ingredient.quantity
+    )} ${showMesurementUnity(ingredient.measurementUnity)} de ${
+      ingredient.description
+    }${index === revenueData.ingredients.length - 1 ? "." : ";"}`;
 
     ulIngredients.appendChild(li);
   });
@@ -86,9 +87,9 @@ window.addEventListener("load", async () => {
   revenueData.equipaments.forEach((equipament, index) => {
     const li = document.createElement("li");
     li.classList.add("line");
-    li.innerHTML = `${equipament.minutes} minutos de ${equipament.description}${
-      index === revenueData.equipaments.length - 1 ? "." : ";"
-    }`;
+    li.innerHTML = `${showNumberAsBrlNumber(equipament.minutes)} minutos de ${
+      equipament.description
+    }${index === revenueData.equipaments.length - 1 ? "." : ";"}`;
 
     ulEquipaments.appendChild(li);
   });

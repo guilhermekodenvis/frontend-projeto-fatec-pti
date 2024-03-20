@@ -18,6 +18,7 @@ import { numberMaskInput } from "../assets/js/number-mask-input.js";
 import { moneyMaskInput } from "../assets/js/money-mask-input.js";
 import { saveMoneyAsNumber } from "../assets/js/save-money-as-number.js";
 import { saveNumberStringAsNumber } from "../assets/js/save-number-string-as-number.js";
+import { showNumberAsBrlNumber } from "../assets/js/show-number-as-brl-number.js";
 
 validateLogin();
 
@@ -52,8 +53,8 @@ const editIngredient = (ingredientId) => {
         const ingredient = doc.data();
         description.value = ingredient.description;
         measurementUnity.value = ingredient.measurementUnity;
-        price.value = ingredient.price;
-        quantityInItem.value = ingredient.quantityInItem;
+        price.value = formatNumberToBRLCurrency(ingredient.price);
+        quantityInItem.value = showNumberAsBrlNumber(ingredient.quantityInItem);
 
         btAddIngredient.click();
       } else {
@@ -204,9 +205,9 @@ window.addEventListener("load", async function () {
 
     row.innerHTML = `
       <td>${ingredient.description}</td>
-      <td>${ingredient.quantityInItem}${showMesurementUnity(
-      ingredient.measurementUnity
-    )}</td>
+      <td>${showNumberAsBrlNumber(
+        ingredient.quantityInItem
+      )} ${showMesurementUnity(ingredient.measurementUnity)}</td>
       <td>${formatNumberToBRLCurrency(ingredient.price)}</td>
       <td>
         <div class="action-buttons-group">
