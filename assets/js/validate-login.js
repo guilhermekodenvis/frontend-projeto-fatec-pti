@@ -8,20 +8,38 @@ export const validateLogin = () => {
   const localUser = sessionGetUser();
   const { pathname } = window.location;
 
-  if (
-    pathname === "/" ||
-    pathname === "/login/" ||
-    pathname === "/criar-nova-conta/" ||
-    pathname === "/esqueci-minha-senha/"
-  ) {
-    if (localUser) {
-      window.location.href = "/dashboard";
+  if (pathname.search("/frontend-projeto-fatec-pti") === 0) {
+    if (
+      pathname === "/frontend-projeto-fatec-pti/" ||
+      pathname === "/frontend-projeto-fatec-pti/login/" ||
+      pathname === "/frontend-projeto-fatec-pti/criar-nova-conta/" ||
+      pathname === "/frontend-projeto-fatec-pti/esqueci-minha-senha/"
+    ) {
+      if (localUser) {
+        window.location.href = "/frontend-projeto-fatec-pti/dashboard";
+      }
+      return;
     }
-    return;
-  }
-
-  if (!localUser) {
-    window.location.href = "/";
+  
+    if (!localUser) {
+      window.location.href = "/frontend-projeto-fatec-pti/";
+    }
+  } else {
+    if (
+      pathname === "/" ||
+      pathname === "/login/" ||
+      pathname === "/criar-nova-conta/" ||
+      pathname === "/esqueci-minha-senha/"
+    ) {
+      if (localUser) {
+        window.location.href = "/dashboard";
+      }
+      return;
+    }
+  
+    if (!localUser) {
+      window.location.href = "/";
+    }
   }
 
   const auth = getAuth();
