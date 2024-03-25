@@ -1,7 +1,8 @@
 const btCreateNewAccount = document.getElementById("btCreateNewAccount")
 
 btCreateNewAccount.addEventListener("click", () => {
-  window.location.href = "/criar-nova-conta"
+  const { pathname } = window.location;
+  window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/criar-nova-conta" : "/criar-nova-conta"}`;
 })
 
 const togglePassword = () => {

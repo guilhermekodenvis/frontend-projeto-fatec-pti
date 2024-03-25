@@ -4,11 +4,13 @@ import {
   signOut,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
+const { pathname } = window.location;
+
 export const sessionLogin = (user) => {
   sessionStorage.setItem("CaaS@user", JSON.stringify(user));
   showSuccessToast("Bem-vindo de volta!");
   setTimeout(() => {
-    window.location.href = "/dashboard";
+    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/dashboard" : "/dashboard"}`;
   }, 2000);
 };
 
@@ -19,7 +21,7 @@ export const sessionLogout = (stopLoader, logoutMessage) => {
       sessionStorage.removeItem("CaaS@user");
       showWarningToast(logoutMessage || "Até mais! Volte sempre.");
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/" : "/"}`;
       }, 2000);
       stopLoader();
     })

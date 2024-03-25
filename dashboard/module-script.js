@@ -92,7 +92,8 @@ const closeDrawer = () => {
 };
 
 btGoToSalesHistory.addEventListener("click", () => {
-  window.location.href = "/historico-das-vendas";
+  const { pathname } = window.location;
+  window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/historico-das-vendas" : "/historico-das-vendas"}`;
 });
 
 btRegisterSale.addEventListener("click", toggleDrawer);

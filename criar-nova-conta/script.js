@@ -1,7 +1,8 @@
 const btGoToLogin = document.getElementById("btGoToLogin")
 
 btGoToLogin.addEventListener("click", () => {
-  window.location.href = "/login"
+  const { pathname } = window.location;
+  window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/login" : "/login"}`;
 })
 
 const togglePassword = () => {

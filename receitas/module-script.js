@@ -351,7 +351,8 @@ const editRevenue = (revenueId) => {
 };
 
 const viewRevenue = (revenueId) => {
-  window.location.href = `/detalhes-da-receita/?id=${revenueId}`;
+  const { pathname } = window.location;
+  window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? `/frontend-projeto-fatec-pti/detalhes-da-receita/?id=${revenueId}` : `/detalhes-da-receita/?id=${revenueId}`}`;
 };
 
 btNewRevenue.addEventListener("click", toggleDrawer);

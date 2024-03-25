@@ -23,6 +23,8 @@ export const createSidebar = async (active) => {
     .parseFromString(tableSvg, "image/svg+xml")
     .querySelector("svg");
 
+  const { pathname } = window.location;
+
   const { uid } = sessionGetUser();
   const userRef = doc(db, "users", uid);
 
@@ -87,23 +89,23 @@ export const createSidebar = async (active) => {
   const userProfileInfo = sidebar.querySelector("#userProfileInfo");
 
   dashboardItem.addEventListener("click", () => {
-    window.location.href = "/dashboard";
+    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/dashboard" : "/dashboard"}`;
   });
 
   revenuesItem.addEventListener("click", () => {
-    window.location.href = "/receitas";
+    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/receitas" : "/receitas"}`;
   });
 
   ingredientsItem.addEventListener("click", () => {
-    window.location.href = "/ingredientes";
+    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/ingredientes" : "/ingredientes"}`;
   });
 
   equipamentsItem.addEventListener("click", () => {
-    window.location.href = "/equipamentos";
+    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/equipamentos" : "/equipamentos"}`;
   });
 
   userProfileInfo.addEventListener("click", () => {
-    window.location.href = "/editar-perfil";
+    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/editar-perfil" : "/editar-perfil"}`;
   });
 
   return sidebar;
