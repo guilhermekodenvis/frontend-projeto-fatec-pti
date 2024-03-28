@@ -6,6 +6,7 @@ import {
   where,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
+import { getUserId } from "../assets/js/session-controller.js";
 
 const loader = document.getElementById("loader");
 
@@ -44,9 +45,12 @@ window.addEventListener("load", async () => {
 
   const sixMonthsAgoString = sixMonthsAgo.toISOString().slice(0, 10);
 
+  const userId = getUserId();
+
   const q = query(
     collection(db, "sales"),
-    where("date", ">=", sixMonthsAgoString)
+    where("date", ">=", sixMonthsAgoString),
+    where("userId", "==", userId)
   );
 
   const querySnapshot = await getDocs(q);

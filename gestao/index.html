@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaaS - Gestão</title>
+    
+    <link rel="stylesheet" href="./../assets/css/global-styles.css">
+    <link rel="stylesheet" href="./../assets/css/components.css">
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  </head>
+  <body>
+    <div class="dashboard-container">
+      <div id="sidebar"></div>
+      <div class="dashboard-content">
+        <div class="dashboard-header">
+          <div class="header-title">
+            <h1>Gestão</h1>
+            <div class="btn-icon">
+              <i data-feather="log-out" id="logoutButton"></i>
+            </div>
+          </div>
+          <p>Faça a análise das suas vendas. Veja os produtos mais vendidos e tome boas decisões de negócio. </p>
+        </div>
+        <div class="dashboard-body">
+          <div class="top-actions-group">
+            <button class="btn btn-primary btn-wrap" id="btGoToSalesHistory">Histórico das vendas</button>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <div class="info-group">
+          <h2>
+            Receitas mais vendidas
+          </h2>
+          <p>As 5 receitas mais vendidas dos últimos 90 dias.</p>
+          <div>
+            <canvas id="topProductsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="info-group">
+          <h2>
+            Lucro geral
+          </h2>
+          <p>Margem de lucro e vendas dos últimos 6 meses.</p>
+          <div>
+            <canvas id="generalProfitChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+
+    <div class="glass glass-close" id="glass"></div>
+    <span class="loader" id="loader"></span>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="../assets/js/global-scripts.js"></script>
+    <script type="module" src="./module-script.js"></script>
+    <script type="module" src="./top-products-graphic-module.js"></script>
+    <script type="module" src="./general-profit-chart-module.js"></script>
+  </body>
+</html>

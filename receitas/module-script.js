@@ -4,7 +4,7 @@ import { moneyMaskInput } from "../assets/js/money-mask-input.js";
 import { numberMaskInput } from "../assets/js/number-mask-input.js";
 import { saveMoneyAsNumber } from "../assets/js/save-money-as-number.js";
 import { saveNumberStringAsNumber } from "../assets/js/save-number-string-as-number.js";
-import { sessionLogout } from "../assets/js/session-controller.js";
+import { getUserId, sessionLogout } from "../assets/js/session-controller.js";
 import { showMesurementUnity } from "../assets/js/show-mesurement-unity.js";
 import { showNumberAsBrlNumber } from "../assets/js/show-number-as-brl-number.js";
 import { showDangerToast, showSuccessToast } from "../assets/js/toast.js";
@@ -18,6 +18,8 @@ import {
   addDoc,
   deleteDoc,
   setDoc,
+  query,
+  where,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 validateLogin();
@@ -352,7 +354,11 @@ const editRevenue = (revenueId) => {
 
 const viewRevenue = (revenueId) => {
   const { pathname } = window.location;
-  window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? `/frontend-projeto-fatec-pti/detalhes-da-receita/?id=${revenueId}` : `/detalhes-da-receita/?id=${revenueId}`}`;
+  window.location.href = `${
+    pathname.search("/frontend-projeto-fatec-pti") === 0
+      ? `/frontend-projeto-fatec-pti/detalhes-da-receita/?id=${revenueId}`
+      : `/detalhes-da-receita/?id=${revenueId}`
+  }`;
 };
 
 btNewRevenue.addEventListener("click", toggleDrawer);
@@ -568,7 +574,13 @@ selectEquipaments.addEventListener("change", async (e) => {
 
 btNewRevenue.addEventListener("click", async () => {
   loader.style.display = "block";
-  const querySnapshot = await getDocs(collection(db, "ingredients"));
+
+  const ingredientsRef = collection(db, "ingredients");
+  const userId = getUserId();
+
+  const q = query(ingredientsRef, where("userId", "==", userId));
+
+  const querySnapshot = await getDocs(q);
 
   if (querySnapshot.empty) {
     loader.style.display = "none";
@@ -590,7 +602,13 @@ btNewRevenue.addEventListener("click", async () => {
 
 btNewRevenue.addEventListener("click", async () => {
   loader.style.display = "block";
-  const querySnapshot = await getDocs(collection(db, "equipaments"));
+
+  const equipamentsRef = collection(db, "equipaments");
+  const userId = getUserId();
+
+  const q = query(equipamentsRef, where("userId", "==", userId));
+
+  const querySnapshot = await getDocs(q);
 
   if (querySnapshot.empty) {
     loader.style.display = "none";
@@ -614,6 +632,8 @@ formNewRevenue.addEventListener("submit", async (e) => {
   e.preventDefault();
   loader.style.display = "block";
 
+  const userId = getUserId();
+
   const description = e.target.description.value;
   const preparingMode = e.target.preparingMode.value;
   const salePrice = e.target.salePrice.value;
@@ -627,6 +647,7 @@ formNewRevenue.addEventListener("submit", async (e) => {
     revenueCost,
     priceWithMargin,
     salePrice: saveMoneyAsNumber(salePrice),
+    userId,
   };
 
   if (editingRevenueId) {
@@ -674,7 +695,13 @@ window.addEventListener("load", async () => {
 
 window.addEventListener("load", async function () {
   loader.style.display = "block";
-  const querySnapshot = await getDocs(collection(db, "revenues"));
+
+  const revenuesRef = collection(db, "revenues");
+  const userId = getUserId();
+
+  const q = query(revenuesRef, where("userId", "==", userId));
+
+  const querySnapshot = await getDocs(q);
 
   if (querySnapshot.empty) {
     loader.style.display = "none";

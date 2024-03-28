@@ -223,7 +223,7 @@ editProfile.addEventListener("submit", (event) => {
 });
 
 window.addEventListener("load", async () => {
-  const createdSidebar = await createSidebar("dashboard");
+  const createdSidebar = await createSidebar("management");
   sidebar.appendChild(createdSidebar);
 });
 

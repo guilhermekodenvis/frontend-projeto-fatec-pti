@@ -1,9 +1,3 @@
-import { db } from "../assets/js/firebase-module.js";
-import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
-import { numberMaskInput } from "../assets/js/number-mask-input.js";
-import { saveNumberStringAsNumber } from "../assets/js/save-number-string-as-number.js";
-import { sessionLogout } from "../assets/js/session-controller.js";
-import { showSuccessToast } from "../assets/js/toast.js";
 import { validateLogin } from "../assets/js/validate-login.js";
 import { createSidebar } from "../components/sidebar.js";
 import {
@@ -12,27 +6,35 @@ import {
   getDoc,
   doc,
   addDoc,
+  query,
+  where,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { showSuccessToast } from "../assets/js/toast.js";
+import { saveNumberStringAsNumber } from "../assets/js/save-number-string-as-number.js";
+import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
+import { db } from "../assets/js/firebase-module.js";
+import { numberMaskInput } from "../assets/js/number-mask-input.js";
+import { getUserId } from "../assets/js/session-controller.js";
+import { showNumberAsBrlNumber } from "../assets/js/show-number-as-brl-number.js";
 
 validateLogin();
 
-const loader = document.getElementById("loader");
 const selectRevenues = document.getElementById("selectRevenues");
-const btRegisterSale = document.getElementById("btRegisterSale");
-const descartRevenueButton = document.getElementById("descartRevenueButton");
-const addRevenueButton = document.getElementById("addRevenueButton");
-const tableRevenues = document.getElementById("tableRevenues");
 const finalSalePrice = document.getElementById("finalSalePrice");
 const formRegisterNewSale = document.getElementById("formRegisterNewSale");
-const quantity = document.getElementById("quantity");
+const btRegisterSale = document.getElementById("btRegisterSale");
 const drawerRegisterSale = document.getElementById("drawerRegisterSale");
 const closeButton = document.getElementById("closeButton");
 const glass = document.getElementById("glass");
 const drawerHeader = document.getElementById("drawerHeader");
 const btCancel = document.getElementById("btCancel");
-const btGoToSalesHistory = document.getElementById("btGoToSalesHistory");
+const addRevenueButton = document.getElementById("addRevenueButton");
+const loader = document.getElementById("loader");
+const descartRevenueButton = document.getElementById("descartRevenueButton");
+const tableRevenues = document.getElementById("tableRevenues");
 const logoutButton = document.getElementById("logoutButton").parentElement;
 const formAddRevenueToSale = document.getElementById("formAddRevenueToSale");
+const quantity = document.getElementById("quantity");
 let addedRevenues = [];
 let salesCost = 0;
 
@@ -91,18 +93,48 @@ const closeDrawer = () => {
   toggleDrawer();
 };
 
-btGoToSalesHistory.addEventListener("click", () => {
-  const { pathname } = window.location;
-  window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/historico-das-vendas" : "/historico-das-vendas"}`;
-});
+const getTrashButton = (saleId) => {
+  const trashSvg = feather.icons["trash-2"].toSvg({
+    id: `deleteSale-${saleId}`,
+  });
+  const parser = new DOMParser();
+  return parser.parseFromString(trashSvg, "image/svg+xml").querySelector("svg");
+};
 
-btRegisterSale.addEventListener("click", toggleDrawer);
+const getSaleDescription = (sale) => {
+  let description = "";
+
+  sale.revenues.forEach((revenue) => {
+    description += `${showNumberAsBrlNumber(revenue.quantity)}x ${
+      revenue.description
+    }, `;
+  });
+
+  description = description.slice(0, -2);
+
+  return description;
+};
+
+const getProfit = (sale) => {
+  let profit = 0;
+  let totalRevenueCost = 0;
+
+  sale.revenues.forEach((revenue) => {
+    totalRevenueCost += revenue.revenueCost * revenue.quantity;
+  });
+
+  profit = sale.totalCost - totalRevenueCost;
+
+  return profit;
+};
 
 glass.addEventListener("click", closeDrawer);
 
 closeButton.addEventListener("click", closeDrawer);
 
 btCancel.addEventListener("click", closeDrawer);
+
+btRegisterSale.addEventListener("click", toggleDrawer);
 
 quantity.addEventListener("input", (e) => {
   numberMaskInput(e);
@@ -116,51 +148,15 @@ logoutButton.addEventListener("click", () => {
   });
 });
 
-formRegisterNewSale.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  loader.style.display = "block";
-
-  const date = new Date().toISOString().split("T")[0];
-
-  const sale = {
-    revenues: addedRevenues,
-    totalCost: salesCost,
-    date,
-  };
-
-  addDoc(collection(db, "sales"), sale)
-    .then(() => {
-      loader.style.display = "none";
-
-      showSuccessToast("Venda registrada com sucesso!");
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-    })
-    .catch((error) => {
-      loader.style.display = "none";
-
-      console.error(error);
-      showDangerToast(
-        "Erro ao registrar uma venda. Tente novamente mais tarde."
-      );
-    });
-});
-
-selectRevenues.addEventListener("change", async (e) => {
-  const revenueId = e.target.value;
-
-  if (revenueId === "null") {
-    formAddRevenueToSale.style.display = "none";
-    return;
-  }
-
-  formAddRevenueToSale.style.display = "block";
-});
-
 btRegisterSale.addEventListener("click", async () => {
   loader.style.display = "block";
-  const querySnapshot = await getDocs(collection(db, "revenues"));
+
+  const ingredientsRef = collection(db, "revenues");
+  const userId = getUserId();
+
+  const q = query(ingredientsRef, where("userId", "==", userId));
+
+  const querySnapshot = await getDocs(q);
 
   if (querySnapshot.empty) {
     loader.style.display = "none";
@@ -183,21 +179,6 @@ btRegisterSale.addEventListener("click", async () => {
   });
 
   loader.style.display = "none";
-});
-
-descartRevenueButton.addEventListener("click", () => {
-  const selectRevenues = document.getElementById("selectRevenues");
-  const quantity = document.getElementById("quantity");
-
-  selectRevenues.value = "null";
-  quantity.value = "";
-
-  formAddRevenueToSale.style.display = "none";
-});
-
-window.addEventListener("load", async () => {
-  const createdSidebar = await createSidebar("dashboard");
-  sidebar.appendChild(createdSidebar);
 });
 
 addRevenueButton.addEventListener("click", async () => {
@@ -255,4 +236,117 @@ addRevenueButton.addEventListener("click", async () => {
   selectRevenues.value = "null";
   quantity.value = "";
   formAddRevenueToSale.style.display = "none";
+});
+
+selectRevenues.addEventListener("change", async (e) => {
+  const revenueId = e.target.value;
+
+  if (revenueId === "null") {
+    formAddRevenueToSale.style.display = "none";
+    return;
+  }
+
+  formAddRevenueToSale.style.display = "block";
+});
+
+formRegisterNewSale.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  loader.style.display = "block";
+
+  const date = new Date().toISOString().split("T")[0];
+
+  const userId = getUserId();
+
+  const sale = {
+    revenues: addedRevenues,
+    totalCost: salesCost,
+    date,
+    userId,
+  };
+
+  addDoc(collection(db, "sales"), sale)
+    .then(() => {
+      loader.style.display = "none";
+
+      showSuccessToast("Venda registrada com sucesso!");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    })
+    .catch((error) => {
+      loader.style.display = "none";
+
+      console.error(error);
+      showDangerToast(
+        "Erro ao registrar uma venda. Tente novamente mais tarde."
+      );
+    });
+});
+
+descartRevenueButton.addEventListener("click", () => {
+  const selectRevenues = document.getElementById("selectRevenues");
+  const quantity = document.getElementById("quantity");
+
+  selectRevenues.value = "null";
+  quantity.value = "";
+
+  formAddRevenueToSale.style.display = "none";
+});
+
+window.addEventListener("load", async () => {
+  loader.style.display = "block";
+  const today = new Date().toISOString().split("T")[0];
+
+  const userId = getUserId();
+
+  const q = query(
+    collection(db, "sales"),
+    where("date", "==", today),
+    where("userId", "==", userId)
+  );
+
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+    loader.style.display = "none";
+    noDataFound.style.display = "block";
+    tableSales.style.display = "none";
+    return;
+  }
+
+  querySnapshot.forEach((doc) => {
+    const sale = doc.data();
+    const row = tableSales.insertRow(-1);
+
+    const trashButton = getTrashButton(doc.id);
+
+    row.innerHTML = `
+      <td>${getSaleDescription(sale)}</td>
+      <td>${formatNumberToBRLCurrency(sale.totalCost)}</td>
+      <td>${formatNumberToBRLCurrency(getProfit(sale))}</td>
+      <td>
+        <div class="action-buttons-group">
+          <div class="btn-icon">
+            ${trashButton.outerHTML}
+          </div>
+        </div>
+      </td>
+    `;
+  });
+
+  const allDeleteButtons = document.querySelectorAll("[id^='deleteSale-']");
+
+  allDeleteButtons.forEach((button) => {
+    const saleId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      deleteSale(saleId);
+    });
+  });
+
+  loader.style.display = "none";
+});
+
+window.addEventListener("load", async () => {
+  const createdSidebar = await createSidebar("pos");
+  sidebar.appendChild(createdSidebar);
 });

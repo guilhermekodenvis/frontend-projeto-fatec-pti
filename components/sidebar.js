@@ -6,21 +6,29 @@ import { db } from "../assets/js/firebase-module.js";
 import { sessionGetUser } from "../assets/js/session-controller.js";
 
 export const createSidebar = async (active) => {
-  const homeSvg = feather.icons["home"].toSvg();
-  const homeIcon = new DOMParser()
-    .parseFromString(homeSvg, "image/svg+xml")
+  const pieChartSvg = feather.icons["pie-chart"].toSvg();
+  const pieChartIcon = new DOMParser()
+    .parseFromString(pieChartSvg, "image/svg+xml")
     .querySelector("svg");
+
+  const dollarSignSvg = feather.icons["dollar-sign"].toSvg();
+  const dollarSignIcon = new DOMParser()
+    .parseFromString(dollarSignSvg, "image/svg+xml")
+    .querySelector("svg");
+
   const fileTextSvg = feather.icons["file-text"].toSvg();
   const fileTextIcon = new DOMParser()
     .parseFromString(fileTextSvg, "image/svg+xml")
     .querySelector("svg");
-  const airPlaySvg = feather.icons["airplay"].toSvg();
-  const airPlayIcon = new DOMParser()
-    .parseFromString(airPlaySvg, "image/svg+xml")
+
+  const packageSvg = feather.icons["package"].toSvg();
+  const packageIcon = new DOMParser()
+    .parseFromString(packageSvg, "image/svg+xml")
     .querySelector("svg");
-  const tableSvg = feather.icons["table"].toSvg();
-  const tabelIcon = new DOMParser()
-    .parseFromString(tableSvg, "image/svg+xml")
+
+  const dropletSvg = feather.icons["droplet"].toSvg();
+  const dropletIcon = new DOMParser()
+    .parseFromString(dropletSvg, "image/svg+xml")
     .querySelector("svg");
 
   const { pathname } = window.location;
@@ -36,11 +44,19 @@ export const createSidebar = async (active) => {
       <h2>CaaS</h2>
     </div>
     <div class="sidebar-item ${
-      active === "dashboard" ? "sidebar-item-active" : ""
-    }" id="dashboardItem">
-      ${homeIcon.outerHTML}
+      active === "management" ? "sidebar-item-active" : ""
+    }" id="managementItem">
+      ${pieChartIcon.outerHTML}
       <p>
-        Dashboard
+        Gestão
+      </p>
+    </div>
+    <div class="sidebar-item ${
+      active === "pos" ? "sidebar-item-active" : ""
+    }" id="posItem">
+      ${dollarSignIcon.outerHTML}
+      <p>
+        Caixa
       </p>
     </div>
     <div class="sidebar-item ${
@@ -54,7 +70,7 @@ export const createSidebar = async (active) => {
     <div class="sidebar-item ${
       active === "ingredients" ? "sidebar-item-active" : ""
     }" id="ingredientsItem">
-      ${tabelIcon.outerHTML}
+      ${dropletIcon.outerHTML}
       <p>
         Ingredientes
       </p>
@@ -62,7 +78,7 @@ export const createSidebar = async (active) => {
     <div class="sidebar-item ${
       active === "equipaments" ? "sidebar-item-active" : ""
     }" id="equipamentsItem">
-      ${airPlayIcon.outerHTML}
+      ${packageIcon.outerHTML}
       <p>
         Equipamentos
       </p>
@@ -82,30 +98,59 @@ export const createSidebar = async (active) => {
   `;
   sidebar.classList.add("dashboard-side-menu");
 
-  const dashboardItem = sidebar.querySelector("#dashboardItem");
+  const managementItem = sidebar.querySelector("#managementItem");
+  const posItem = sidebar.querySelector("#posItem");
   const revenuesItem = sidebar.querySelector("#revenuesItem");
   const ingredientsItem = sidebar.querySelector("#ingredientsItem");
   const equipamentsItem = sidebar.querySelector("#equipamentsItem");
   const userProfileInfo = sidebar.querySelector("#userProfileInfo");
 
-  dashboardItem.addEventListener("click", () => {
-    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/dashboard" : "/dashboard"}`;
+  managementItem.addEventListener("click", () => {
+    window.location.href = `${
+      pathname.search("/frontend-projeto-fatec-pti") === 0
+        ? "/frontend-projeto-fatec-pti/gestao"
+        : "/gestao"
+    }`;
+  });
+
+  posItem.addEventListener("click", () => {
+    window.location.href = `${
+      pathname.search("/frontend-projeto-fatec-pti") === 0
+        ? "/frontend-projeto-fatec-pti/caixa"
+        : "/caixa"
+    }`;
   });
 
   revenuesItem.addEventListener("click", () => {
-    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/receitas" : "/receitas"}`;
+    window.location.href = `${
+      pathname.search("/frontend-projeto-fatec-pti") === 0
+        ? "/frontend-projeto-fatec-pti/receitas"
+        : "/receitas"
+    }`;
   });
 
   ingredientsItem.addEventListener("click", () => {
-    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/ingredientes" : "/ingredientes"}`;
+    window.location.href = `${
+      pathname.search("/frontend-projeto-fatec-pti") === 0
+        ? "/frontend-projeto-fatec-pti/ingredientes"
+        : "/ingredientes"
+    }`;
   });
 
   equipamentsItem.addEventListener("click", () => {
-    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/equipamentos" : "/equipamentos"}`;
+    window.location.href = `${
+      pathname.search("/frontend-projeto-fatec-pti") === 0
+        ? "/frontend-projeto-fatec-pti/equipamentos"
+        : "/equipamentos"
+    }`;
   });
 
   userProfileInfo.addEventListener("click", () => {
-    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/editar-perfil" : "/editar-perfil"}`;
+    window.location.href = `${
+      pathname.search("/frontend-projeto-fatec-pti") === 0
+        ? "/frontend-projeto-fatec-pti/editar-perfil"
+        : "/editar-perfil"
+    }`;
   });
 
   return sidebar;

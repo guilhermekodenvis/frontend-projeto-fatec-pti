@@ -10,7 +10,11 @@ export const sessionLogin = (user) => {
   sessionStorage.setItem("CaaS@user", JSON.stringify(user));
   showSuccessToast("Bem-vindo de volta!");
   setTimeout(() => {
-    window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/dashboard" : "/dashboard"}`;
+    window.location.href = `${
+      pathname.search("/frontend-projeto-fatec-pti") === 0
+        ? "/frontend-projeto-fatec-pti/gestao"
+        : "/gestao"
+    }`;
   }, 2000);
 };
 
@@ -21,7 +25,11 @@ export const sessionLogout = (stopLoader, logoutMessage) => {
       sessionStorage.removeItem("CaaS@user");
       showWarningToast(logoutMessage || "Até mais! Volte sempre.");
       setTimeout(() => {
-        window.location.href = `${pathname.search("/frontend-projeto-fatec-pti") === 0 ? "/frontend-projeto-fatec-pti/" : "/"}`;
+        window.location.href = `${
+          pathname.search("/frontend-projeto-fatec-pti") === 0
+            ? "/frontend-projeto-fatec-pti/"
+            : "/"
+        }`;
       }, 2000);
       stopLoader();
     })
@@ -34,4 +42,9 @@ export const sessionLogout = (stopLoader, logoutMessage) => {
 
 export const sessionGetUser = () => {
   return JSON.parse(sessionStorage.getItem("CaaS@user"));
+};
+
+export const getUserId = () => {
+  const user = sessionGetUser();
+  return user ? user.uid : null;
 };

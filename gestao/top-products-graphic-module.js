@@ -5,7 +5,7 @@ import {
   query,
   where,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
+import { getUserId } from "../assets/js/session-controller.js";
 
 const loader = document.getElementById("loader");
 
@@ -19,9 +19,12 @@ window.addEventListener("load", async () => {
   ninetyDaysAgo.setDate(today.getDate() - 90);
   const ninetyDaysAgoString = ninetyDaysAgo.toISOString().slice(0, 10);
 
+  const userId = getUserId();
+
   const q = query(
     collection(db, "sales"),
-    where("date", ">=", ninetyDaysAgoString)
+    where("date", ">=", ninetyDaysAgoString),
+    where("userId", "==", userId)
   );
 
   const querySnapshot = await getDocs(q);

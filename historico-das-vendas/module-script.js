@@ -1,5 +1,5 @@
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
-import { sessionLogout } from "../assets/js/session-controller.js";
+import { getUserId, sessionLogout } from "../assets/js/session-controller.js";
 import { showNumberAsBrlNumber } from "../assets/js/show-number-as-brl-number.js";
 import { showDangerToast } from "../assets/js/toast.js";
 import { validateLogin } from "../assets/js/validate-login.js";
@@ -129,7 +129,13 @@ dateFilter.addEventListener("change", async (e) => {
 
   const selectedDate = e.target.value;
 
-  const q = query(collection(db, "sales"), where("date", "==", selectedDate));
+  const userId = getUserId();
+
+  const q = query(
+    collection(db, "sales"),
+    where("date", "==", selectedDate),
+    where("userId", "==", userId)
+  );
 
   const querySnapshot = await getDocs(q);
 
@@ -150,7 +156,13 @@ window.addEventListener("load", async function () {
   loader.style.display = "block";
   const today = new Date().toISOString().split("T")[0];
 
-  const q = query(collection(db, "sales"), where("date", "==", today));
+  const userId = getUserId();
+
+  const q = query(
+    collection(db, "sales"),
+    where("date", "==", today),
+    where("userId", "==", userId)
+  );
 
   const querySnapshot = await getDocs(q);
 
@@ -165,7 +177,7 @@ window.addEventListener("load", async function () {
 });
 
 window.addEventListener("load", async () => {
-  const createdSidebar = await createSidebar("dashboard");
+  const createdSidebar = await createSidebar("management");
   sidebar.appendChild(createdSidebar);
 });
 

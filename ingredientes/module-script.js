@@ -8,9 +8,11 @@ import {
   deleteDoc,
   getDoc,
   setDoc,
+  query,
+  where,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
-import { sessionLogout } from "../assets/js/session-controller.js";
+import { getUserId, sessionLogout } from "../assets/js/session-controller.js";
 import { createSidebar } from "../components/sidebar.js";
 import { showMesurementUnity } from "../assets/js/show-mesurement-unity.js";
 import { validateLogin } from "../assets/js/validate-login.js";
@@ -116,6 +118,7 @@ formCreateNewIngredient.addEventListener("submit", function (event) {
   event.preventDefault();
 
   loader.style.display = "block";
+  const userId = getUserId();
 
   const description = event.target.elements.description.value;
   const measurementUnity = event.target.elements.measurementUnity.value;
@@ -131,6 +134,7 @@ formCreateNewIngredient.addEventListener("submit", function (event) {
       measurementUnity,
       price,
       quantityInItem,
+      userId,
     })
       .then(() => {
         loader.style.display = "none";
@@ -155,6 +159,7 @@ formCreateNewIngredient.addEventListener("submit", function (event) {
     measurementUnity,
     price,
     quantityInItem,
+    userId,
   })
     .then(() => {
       loader.style.display = "none";
@@ -187,7 +192,13 @@ window.addEventListener("load", async () => {
 
 window.addEventListener("load", async function () {
   loader.style.display = "block";
-  const querySnapshot = await getDocs(collection(db, "ingredients"));
+
+  const ingredientsRef = collection(db, "ingredients");
+  const userId = getUserId();
+
+  const q = query(ingredientsRef, where("userId", "==", userId));
+
+  const querySnapshot = await getDocs(q);
 
   if (querySnapshot.empty) {
     loader.style.display = "none";

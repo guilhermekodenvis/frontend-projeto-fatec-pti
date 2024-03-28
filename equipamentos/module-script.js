@@ -1,17 +1,19 @@
 import { db } from "../assets/js/firebase-module.js";
-import { sessionLogout } from "../assets/js/session-controller.js";
+import { getUserId, sessionLogout } from "../assets/js/session-controller.js";
 import { showResourceName } from "../assets/js/show-resource-name.js";
 import { validateLogin } from "../assets/js/validate-login.js";
 import { createSidebar } from "../components/sidebar.js";
 import { showDangerToast, showSuccessToast } from "./../assets/js/toast.js";
 import {
   collection,
-  addDoc,
   getDocs,
+  addDoc,
   doc,
   deleteDoc,
   getDoc,
   setDoc,
+  query,
+  where,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 validateLogin();
@@ -100,6 +102,7 @@ logoutButton.addEventListener("click", () => {
 
 formAddEquipament.addEventListener("submit", function (event) {
   event.preventDefault();
+  const userId = getUserId();
 
   loader.style.display = "block";
 
@@ -111,6 +114,7 @@ formAddEquipament.addEventListener("submit", function (event) {
     setDoc(ingredientRef, {
       description,
       resourceUsed,
+      userId,
     })
       .then(() => {
         loader.style.display = "none";
@@ -133,6 +137,7 @@ formAddEquipament.addEventListener("submit", function (event) {
   addDoc(collection(db, "equipaments"), {
     description,
     resourceUsed,
+    userId,
   })
     .then(() => {
       loader.style.display = "none";
@@ -157,7 +162,12 @@ window.addEventListener("load", async () => {
 
 window.addEventListener("load", async function () {
   loader.style.display = "block";
-  const querySnapshot = await getDocs(collection(db, "equipaments"));
+  const equipamentsRef = collection(db, "equipaments");
+  const userId = getUserId();
+
+  const q = query(equipamentsRef, where("userId", "==", userId));
+
+  const querySnapshot = await getDocs(q);
 
   if (querySnapshot.empty) {
     loader.style.display = "none";
