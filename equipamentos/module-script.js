@@ -14,6 +14,7 @@ import {
   setDoc,
   query,
   where,
+  orderBy,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 validateLogin();
@@ -25,6 +26,11 @@ const logoutButton = document.getElementById("logoutButton").parentElement;
 const formAddEquipament = document.getElementById("formAddEquipament");
 const equipamentEditingId = document.getElementById("equipamentEditingId");
 const btAddEquipament = document.getElementById("btAddEquipament");
+const descriptionOrderIcon = document.getElementById("descriptionOrderIcon");
+const resourceOrderIcon = document.getElementById("resourceOrderIcon");
+const searchEquipamentButton = document.getElementById(
+  "searchEquipamentButton"
+);
 
 const getEditButton = (equipamentId) => {
   const editSvg = feather.icons["edit"].toSvg({
@@ -91,6 +97,310 @@ const deleteEquipament = (equipamentId) => {
       );
     });
 };
+
+const getEquipamentsOrderedByDescription = async (order) => {
+  loader.style.display = "block";
+  const equipamentsRef = collection(db, "equipaments");
+  const userId = getUserId();
+
+  const q = query(
+    equipamentsRef,
+    where("userId", "==", userId),
+    orderBy("description", order),
+    orderBy("resourceUsed", "asc")
+  );
+
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+    loader.style.display = "none";
+    noDataFound.style.display = "block";
+    tableEquipaments.style.display = "none";
+    return;
+  } else {
+    noDataFound.style.display = "none";
+    tableEquipaments.style.display = "table";
+  }
+
+  const tbody = tableEquipaments.getElementsByTagName("tbody")[0];
+
+  tbody.innerHTML = "";
+
+  querySnapshot.forEach((doc) => {
+    const equipament = doc.data();
+
+    const row = tbody.insertRow(-1);
+
+    const editButton = getEditButton(doc.id);
+    const trashButton = getTrashButton(doc.id);
+
+    row.innerHTML = `
+      <td>${equipament.description}</td>
+      <td>${showResourceName(equipament.resourceUsed)}</td>
+      <td>
+        <div class="action-buttons-group">
+          <div class="btn-icon">
+            ${editButton.outerHTML}
+          </div>
+          <div class="btn-icon">
+            ${trashButton.outerHTML}
+          </div>
+        </div>
+      </td>
+    `;
+  });
+
+  const allDeleteButtons = document.querySelectorAll(
+    "[id^='deleteEquipament-']"
+  );
+
+  const allEditButtons = document.querySelectorAll("[id^='editEquipament-']");
+
+  allDeleteButtons.forEach((button) => {
+    const ingredientId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      deleteEquipament(ingredientId);
+    });
+  });
+
+  allEditButtons.forEach((button) => {
+    const ingredientId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      editEquipament(ingredientId);
+    });
+  });
+
+  loader.style.display = "none";
+};
+
+const getEquipamentsOrderedByResource = async (order) => {
+  loader.style.display = "block";
+  const equipamentsRef = collection(db, "equipaments");
+  const userId = getUserId();
+
+  const q = query(
+    equipamentsRef,
+    where("userId", "==", userId),
+    orderBy("resourceUsed", order),
+    orderBy("description", "asc")
+  );
+
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+    loader.style.display = "none";
+    noDataFound.style.display = "block";
+    tableEquipaments.style.display = "none";
+    return;
+  } else {
+    noDataFound.style.display = "none";
+    tableEquipaments.style.display = "table";
+  }
+
+  const tbody = tableEquipaments.getElementsByTagName("tbody")[0];
+
+  tbody.innerHTML = "";
+
+  querySnapshot.forEach((doc) => {
+    const equipament = doc.data();
+
+    const row = tbody.insertRow(-1);
+
+    const editButton = getEditButton(doc.id);
+    const trashButton = getTrashButton(doc.id);
+
+    row.innerHTML = `
+      <td>${equipament.description}</td>
+      <td>${showResourceName(equipament.resourceUsed)}</td>
+      <td>
+        <div class="action-buttons-group">
+          <div class="btn-icon">
+            ${editButton.outerHTML}
+          </div>
+          <div class="btn-icon">
+            ${trashButton.outerHTML}
+          </div>
+        </div>
+      </td>
+    `;
+  });
+
+  const allDeleteButtons = document.querySelectorAll(
+    "[id^='deleteEquipament-']"
+  );
+
+  const allEditButtons = document.querySelectorAll("[id^='editEquipament-']");
+
+  allDeleteButtons.forEach((button) => {
+    const ingredientId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      deleteEquipament(ingredientId);
+    });
+  });
+
+  allEditButtons.forEach((button) => {
+    const ingredientId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      editEquipament(ingredientId);
+    });
+  });
+
+  loader.style.display = "none";
+};
+
+searchEquipamentButton.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  const searchEquipament = document.getElementById("searchEquipament").value;
+  console.log(searchEquipament);
+
+  if (searchEquipament === "") {
+    console.log("searchEquipament === ''");
+    getEquipamentsOrderedByDescription("asc");
+    return;
+  }
+
+  const userId = getUserId();
+
+  const equipamentsRef = collection(db, "equipaments");
+
+  const q = query(equipamentsRef, where("userId", "==", userId));
+
+  getDocs(q)
+    .then((querySnapshot) => {
+      if (querySnapshot.empty) {
+        loader.style.display = "none";
+        noDataFound.style.display = "block";
+        tableEquipaments.style.display = "none";
+        return;
+      } else {
+        noDataFound.style.display = "none";
+        tableEquipaments.style.display = "table";
+      }
+
+      const tbody = tableEquipaments.getElementsByTagName("tbody")[0];
+
+      tbody.innerHTML = "";
+
+      querySnapshot.forEach((doc) => {
+        const equipament = doc.data();
+        if (
+          !equipament.description
+            .toUpperCase()
+            .includes(searchEquipament.toUpperCase())
+        ) {
+          return;
+        }
+
+        const row = tbody.insertRow(-1);
+
+        const editButton = getEditButton(doc.id);
+        const trashButton = getTrashButton(doc.id);
+
+        row.innerHTML = `
+          <td>${equipament.description}</td>
+          <td>${showResourceName(equipament.resourceUsed)}</td>
+          <td>
+            <div class="action-buttons-group">
+              <div class="btn-icon">
+                ${editButton.outerHTML}
+              </div>
+              <div class="btn-icon">
+                ${trashButton.outerHTML}
+              </div>
+            </div>
+          </td>
+        `;
+      });
+
+      const allDeleteButtons = document.querySelectorAll(
+        "[id^='deleteEquipament-']"
+      );
+
+      const allEditButtons = document.querySelectorAll(
+        "[id^='editEquipament-']"
+      );
+
+      allDeleteButtons.forEach((button) => {
+        const equipamentId = button.id.split("-")[1];
+        button.parentNode.addEventListener("click", () => {
+          deleteEquipament(equipamentId);
+        });
+      });
+
+      allEditButtons.forEach((button) => {
+        const equipamentId = button.id.split("-")[1];
+        button.parentNode.addEventListener("click", () => {
+          editEquipament(equipamentId);
+        });
+      });
+
+      loader.style.display = "none";
+    })
+    .catch((error) => {
+      loader.style.display = "none";
+      console.error("Error getting documents: ", error);
+      showDangerToast("Erro interno no servidor. Tente novamente mais tarde.");
+    });
+});
+
+descriptionOrderIcon.parentElement.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  console.log(descriptionOrderIcon.style.visibility);
+
+  if (
+    descriptionOrderIcon.style.visibility === "hidden" ||
+    descriptionOrderIcon.style.visibility === ""
+  ) {
+    descriptionOrderIcon.style.visibility = "visible";
+    resourceOrderIcon.style.visibility = "hidden";
+    descriptionOrderIcon.style.transform = "rotate(0deg)";
+
+    getEquipamentsOrderedByDescription("asc");
+
+    return;
+  }
+
+  if (descriptionOrderIcon.style.transform === "rotate(180deg)") {
+    descriptionOrderIcon.style.transform = "rotate(0deg)";
+
+    getEquipamentsOrderedByDescription("asc");
+  } else {
+    descriptionOrderIcon.style.transform = "rotate(180deg)";
+
+    getEquipamentsOrderedByDescription("desc");
+  }
+
+  loader.style.display = "none";
+});
+
+resourceOrderIcon.parentElement.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  if (
+    resourceOrderIcon.style.visibility === "hidden" ||
+    resourceOrderIcon.style.visibility === ""
+  ) {
+    resourceOrderIcon.style.visibility = "visible";
+    descriptionOrderIcon.style.visibility = "hidden";
+    resourceOrderIcon.style.transform = "rotate(0deg)";
+
+    getEquipamentsOrderedByResource("asc");
+  }
+
+  if (resourceOrderIcon.style.transform === "rotate(180deg)") {
+    resourceOrderIcon.style.transform = "rotate(0deg)";
+
+    getEquipamentsOrderedByResource("asc");
+  } else {
+    resourceOrderIcon.style.transform = "rotate(180deg)";
+
+    getEquipamentsOrderedByResource("desc");
+  }
+
+  loader.style.display = "none";
+});
 
 logoutButton.addEventListener("click", () => {
   loader.style.display = "block";
@@ -161,63 +471,5 @@ window.addEventListener("load", async () => {
 });
 
 window.addEventListener("load", async function () {
-  loader.style.display = "block";
-  const equipamentsRef = collection(db, "equipaments");
-  const userId = getUserId();
-
-  const q = query(equipamentsRef, where("userId", "==", userId));
-
-  const querySnapshot = await getDocs(q);
-
-  if (querySnapshot.empty) {
-    loader.style.display = "none";
-    noDataFound.style.display = "block";
-    tableEquipaments.style.display = "none";
-    return;
-  }
-
-  querySnapshot.forEach((doc) => {
-    const equipament = doc.data();
-    const row = tableEquipaments.insertRow(-1);
-
-    const editButton = getEditButton(doc.id);
-    const trashButton = getTrashButton(doc.id);
-
-    row.innerHTML = `
-      <td>${equipament.description}</td>
-      <td>${showResourceName(equipament.resourceUsed)}</td>
-      <td>
-        <div class="action-buttons-group">
-          <div class="btn-icon">
-            ${editButton.outerHTML}
-          </div>
-          <div class="btn-icon">
-            ${trashButton.outerHTML}
-          </div>
-        </div>
-      </td>
-    `;
-  });
-
-  const allDeleteButtons = document.querySelectorAll(
-    "[id^='deleteEquipament-']"
-  );
-
-  const allEditButtons = document.querySelectorAll("[id^='editEquipament-']");
-
-  allDeleteButtons.forEach((button) => {
-    const ingredientId = button.id.split("-")[1];
-    button.parentNode.addEventListener("click", () => {
-      deleteEquipament(ingredientId);
-    });
-  });
-
-  allEditButtons.forEach((button) => {
-    const ingredientId = button.id.split("-")[1];
-    button.parentNode.addEventListener("click", () => {
-      editEquipament(ingredientId);
-    });
-  });
-
-  loader.style.display = "none";
+  getEquipamentsOrderedByDescription("asc");
 });

@@ -1,9 +1,10 @@
 .top-actions-group {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  margin-top: 32px;
 }
 
 .button-group {
@@ -18,4 +19,16 @@
 
 .button-group button {
   margin-top: 40px;
+}
+
+#descriptionOrderIcon {
+  visibility: visible;
+}
+
+#quantityOrderIcon {
+  visibility: hidden;
+}
+
+#priceOrderIcon {
+  visibility: hidden;
 }

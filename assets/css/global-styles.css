@@ -63,7 +63,7 @@ h2 {
 }
 
 input {
-  padding: 8px;
+  padding: 16px 8px;
   border: none;
   background: transparent;
   border-bottom: 1px solid #130132;
@@ -148,7 +148,6 @@ select {
 
 .input-group label {
   font-weight: 600;
-  margin-bottom: 8px;
 }
 
 div.input-group:not(.input-group-no-margin) {

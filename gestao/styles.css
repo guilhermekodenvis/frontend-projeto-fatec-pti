@@ -21,13 +21,26 @@
   width: fit-content;
 }
 
+.info-group:first-child {
+  width: 400px;
+}
+
+.info-group:last-child {
+  width: 600px;
+}
+
+.info-group .chart {
+  width: 100%;
+}
+
 #topProductsChart {
-  width: 360px !important;
+  width: 320px !important;
+  margin: 0 auto;
 }
 
 #generalProfitChart {
-  width: 600px !important;
-  height: 300px !important;
+  width: 520px !important;
+  margin: 0 auto;
 }
 
 .chart-container {

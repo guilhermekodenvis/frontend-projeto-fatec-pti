@@ -13,10 +13,14 @@ import { validateLogin } from "../assets/js/validate-login.js";
 
 validateLogin();
 
+const loader = document.getElementById("loader");
+
 const formCreateAccount = document.getElementById("formCreateAccount");
 
 formCreateAccount.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  loader.style.display = "block";
 
   const name = e.target.elements.name.value;
   const bakeryName = e.target.elements.bakeryName.value;
@@ -33,9 +37,11 @@ formCreateAccount.addEventListener("submit", async (e) => {
         email,
       })
         .then(() => {
+          loader.style.display = "none";
           sessionLogin(user);
         })
         .catch((error) => {
+          loader.style.display = "none";
           console.error(error);
           showDangerToast(
             "Erro ao criar um usuário. Tente novamente mais tarde."
@@ -43,6 +49,7 @@ formCreateAccount.addEventListener("submit", async (e) => {
         });
     })
     .catch((error) => {
+      loader.style.display = "none";
       console.error(error);
       showDangerToast("Erro ao criar um usuário. Tente novamente mais tarde.");
     });

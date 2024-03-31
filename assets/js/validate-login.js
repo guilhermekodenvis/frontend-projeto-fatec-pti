@@ -16,11 +16,11 @@ export const validateLogin = () => {
       pathname === "/frontend-projeto-fatec-pti/esqueci-minha-senha/"
     ) {
       if (localUser) {
-        window.location.href = "/frontend-projeto-fatec-pti/dashboard";
+        window.location.href = "/frontend-projeto-fatec-pti/gestao";
       }
       return;
     }
-  
+
     if (!localUser) {
       window.location.href = "/frontend-projeto-fatec-pti/";
     }
@@ -32,11 +32,11 @@ export const validateLogin = () => {
       pathname === "/esqueci-minha-senha/"
     ) {
       if (localUser) {
-        window.location.href = "/dashboard";
+        window.location.href = "/gestao";
       }
       return;
     }
-  
+
     if (!localUser) {
       window.location.href = "/";
     }

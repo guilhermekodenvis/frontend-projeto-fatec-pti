@@ -20,6 +20,7 @@ import {
   setDoc,
   query,
   where,
+  orderBy,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 validateLogin();
@@ -65,6 +66,13 @@ const formAddIngredientToRevenue = document.getElementById(
 const formAddEquipamentToRevenue = document.getElementById(
   "formAddEquipamentToRevenue"
 );
+const searchRevenueButton = document.getElementById("searchRevenueButton");
+const descriptionOrderIcon = document.getElementById("descriptionOrderIcon");
+const costOrderIcon = document.getElementById("costOrderIcon");
+const suggestedPriceOrderIcon = document.getElementById(
+  "suggestedPriceOrderIcon"
+);
+const salePriceOrderIcon = document.getElementById("salePriceOrderIcon");
 
 const toggleDrawer = () => {
   drawerNewRevenue.classList.toggle("drawer-close");
@@ -361,6 +369,112 @@ const viewRevenue = (revenueId) => {
   }`;
 };
 
+const mountRevenuesTable = (querySnapshot) => {
+  if (querySnapshot.empty) {
+    loader.style.display = "none";
+    noDataFound.style.display = "block";
+    tableRevenues.style.display = "none";
+    return;
+  } else {
+    noDataFound.style.display = "none";
+    tableRevenues.style.display = "table";
+  }
+
+  const tbody = tableRevenues.getElementsByTagName("tbody")[0];
+
+  tbody.innerHTML = "";
+
+  querySnapshot.forEach((doc) => {
+    const revenue = doc.data();
+    const row = tbody.insertRow(-1);
+
+    const viewButton = getViewButton(doc.id);
+    const editButton = getEditButton(doc.id);
+    const trashButton = getTrashButton(doc.id);
+
+    row.innerHTML = `
+      <td>${revenue.description}</td>
+      <td>${formatNumberToBRLCurrency(revenue.revenueCost)}</td>
+      <td>${formatNumberToBRLCurrency(revenue.priceWithMargin)}</td>
+      <td>${formatNumberToBRLCurrency(revenue.salePrice)}</td>
+      <td>
+        <div class="action-buttons-group">
+          <div class="btn-icon">
+            ${viewButton.outerHTML}
+          </div>
+          <div class="btn-icon">
+            ${editButton.outerHTML}
+          </div>
+          <div class="btn-icon">
+            ${trashButton.outerHTML}
+          </div>
+        </div>
+      </td>
+    `;
+  });
+
+  const allDeleteButtons = document.querySelectorAll("[id^='deleteRevenue-']");
+
+  const allEditButtons = document.querySelectorAll("[id^='editRevenue-']");
+
+  const allViewButtons = document.querySelectorAll("[id^='viewRevenue-']");
+
+  allDeleteButtons.forEach((button) => {
+    const revenueId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      deleteRevenue(revenueId);
+    });
+  });
+
+  allEditButtons.forEach((button) => {
+    const revenueId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      editRevenue(revenueId);
+    });
+  });
+
+  allViewButtons.forEach((button) => {
+    const revenueId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      viewRevenue(revenueId);
+    });
+  });
+
+  loader.style.display = "none";
+};
+
+const getRevenuesOrdered = async (
+  field,
+  order,
+  fieldSnd,
+  orderSnd,
+  fieldTsd,
+  orderTsd,
+  fieldFth,
+  orderFth
+) => {
+  loader.style.display = "block";
+  const revenuesRef = collection(db, "revenues");
+  const userId = getUserId();
+
+  const q = query(
+    revenuesRef,
+    where("userId", "==", userId),
+    orderBy(field, order),
+    orderBy(fieldSnd, orderSnd),
+    orderBy(fieldTsd, orderTsd),
+    orderBy(fieldFth, orderFth)
+  );
+
+  try {
+    const querySnapshot = await getDocs(q);
+    mountRevenuesTable(querySnapshot);
+  } catch (error) {
+    console.error("Error getting documents: ", error);
+    showDangerToast("Erro interno no servidor. Tente novamente mais tarde.");
+  }
+};
+
 btNewRevenue.addEventListener("click", toggleDrawer);
 
 glass.addEventListener("click", closeDrawer);
@@ -368,6 +482,340 @@ glass.addEventListener("click", closeDrawer);
 closeButton.addEventListener("click", closeDrawer);
 
 btCancel.addEventListener("click", closeDrawer);
+
+descriptionOrderIcon.parentElement.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  if (
+    descriptionOrderIcon.style.visibility === "hidden" ||
+    descriptionOrderIcon.style.visibility === ""
+  ) {
+    descriptionOrderIcon.style.visibility = "visible";
+    costOrderIcon.style.visibility = "hidden";
+    suggestedPriceOrderIcon.style.visibility = "hidden";
+    salePriceOrderIcon.style.visibility = "hidden";
+    descriptionOrderIcon.style.transform = "rotate(0deg)";
+
+    getRevenuesOrdered(
+      "description",
+      "asc",
+      "salePrice",
+      "asc",
+      "revenueCost",
+      "asc",
+      "priceWithMargin",
+      "asc"
+    );
+
+    return;
+  }
+
+  if (descriptionOrderIcon.style.transform === "rotate(180deg)") {
+    descriptionOrderIcon.style.transform = "rotate(0deg)";
+
+    getRevenuesOrdered(
+      "description",
+      "asc",
+      "salePrice",
+      "asc",
+      "revenueCost",
+      "asc",
+      "priceWithMargin",
+      "asc"
+    );
+  } else {
+    descriptionOrderIcon.style.transform = "rotate(180deg)";
+
+    getRevenuesOrdered(
+      "description",
+      "desc",
+      "salePrice",
+      "asc",
+      "revenueCost",
+      "asc",
+      "priceWithMargin",
+      "asc"
+    );
+  }
+});
+
+costOrderIcon.parentElement.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  if (
+    costOrderIcon.style.visibility === "hidden" ||
+    costOrderIcon.style.visibility === ""
+  ) {
+    costOrderIcon.style.visibility = "visible";
+    descriptionOrderIcon.style.visibility = "hidden";
+    suggestedPriceOrderIcon.style.visibility = "hidden";
+    salePriceOrderIcon.style.visibility = "hidden";
+    costOrderIcon.style.transform = "rotate(0deg)";
+
+    getRevenuesOrdered(
+      "revenueCost",
+      "asc",
+      "description",
+      "asc",
+      "salePrice",
+      "asc",
+      "priceWithMargin",
+      "asc"
+    );
+
+    return;
+  }
+
+  if (costOrderIcon.style.transform === "rotate(180deg)") {
+    costOrderIcon.style.transform = "rotate(0deg)";
+
+    getRevenuesOrdered(
+      "revenueCost",
+      "asc",
+      "description",
+      "asc",
+      "salePrice",
+      "asc",
+      "priceWithMargin",
+      "asc"
+    );
+  } else {
+    costOrderIcon.style.transform = "rotate(180deg)";
+
+    getRevenuesOrdered(
+      "revenueCost",
+      "desc",
+      "description",
+      "asc",
+      "salePrice",
+      "asc",
+      "priceWithMargin",
+      "asc"
+    );
+  }
+});
+
+suggestedPriceOrderIcon.parentElement.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  if (
+    suggestedPriceOrderIcon.style.visibility === "hidden" ||
+    suggestedPriceOrderIcon.style.visibility === ""
+  ) {
+    suggestedPriceOrderIcon.style.visibility = "visible";
+    descriptionOrderIcon.style.visibility = "hidden";
+    costOrderIcon.style.visibility = "hidden";
+    salePriceOrderIcon.style.visibility = "hidden";
+    suggestedPriceOrderIcon.style.transform = "rotate(0deg)";
+
+    getRevenuesOrdered(
+      "priceWithMargin",
+      "asc",
+      "description",
+      "asc",
+      "salePrice",
+      "asc",
+      "revenueCost",
+      "asc"
+    );
+
+    return;
+  }
+
+  if (suggestedPriceOrderIcon.style.transform === "rotate(180deg)") {
+    suggestedPriceOrderIcon.style.transform = "rotate(0deg)";
+
+    getRevenuesOrdered(
+      "priceWithMargin",
+      "asc",
+      "description",
+      "asc",
+      "salePrice",
+      "asc",
+      "revenueCost",
+      "asc"
+    );
+  } else {
+    suggestedPriceOrderIcon.style.transform = "rotate(180deg)";
+
+    getRevenuesOrdered(
+      "priceWithMargin",
+      "desc",
+      "description",
+      "asc",
+      "salePrice",
+      "asc",
+      "revenueCost",
+      "asc"
+    );
+  }
+});
+
+salePriceOrderIcon.parentElement.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  if (
+    salePriceOrderIcon.style.visibility === "hidden" ||
+    salePriceOrderIcon.style.visibility === ""
+  ) {
+    salePriceOrderIcon.style.visibility = "visible";
+    descriptionOrderIcon.style.visibility = "hidden";
+    costOrderIcon.style.visibility = "hidden";
+    suggestedPriceOrderIcon.style.visibility = "hidden";
+    salePriceOrderIcon.style.transform = "rotate(0deg)";
+
+    getRevenuesOrdered(
+      "salePrice",
+      "asc",
+      "description",
+      "asc",
+      "revenueCost",
+      "asc",
+      "priceWithMargin",
+      "asc"
+    );
+
+    return;
+  }
+
+  if (salePriceOrderIcon.style.transform === "rotate(180deg)") {
+    salePriceOrderIcon.style.transform = "rotate(0deg)";
+
+    getRevenuesOrdered(
+      "salePrice",
+      "asc",
+      "description",
+      "asc",
+      "revenueCost",
+      "asc",
+      "priceWithMargin",
+      "asc"
+    );
+  } else {
+    salePriceOrderIcon.style.transform = "rotate(180deg)";
+
+    getRevenuesOrdered(
+      "salePrice",
+      "desc",
+      "description",
+      "asc",
+      "revenueCost",
+      "asc",
+      "priceWithMargin",
+      "asc"
+    );
+  }
+});
+
+searchRevenueButton.addEventListener("click", async () => {
+  loader.style.display = "block";
+
+  const searchRevenue = document.getElementById("searchRevenue").value;
+
+  if (searchRevenue === "") {
+    getRevenuesOrdered(
+      "description",
+      "asc",
+      "salePrice",
+      "asc",
+      "revenueCost",
+      "asc",
+      "priceWithMargin",
+      "asc"
+    );
+
+    return;
+  }
+
+  const userId = getUserId();
+
+  const revenuesRef = collection(db, "revenues");
+
+  const q = query(revenuesRef, where("userId", "==", userId));
+
+  const querySnapshot = await getDocs(q);
+
+  if (querySnapshot.empty) {
+    loader.style.display = "none";
+    noDataFound.style.display = "block";
+    tableRevenues.style.display = "none";
+    return;
+  } else {
+    noDataFound.style.display = "none";
+    tableRevenues.style.display = "table";
+  }
+
+  const tbody = tableRevenues.getElementsByTagName("tbody")[0];
+
+  tbody.innerHTML = "";
+
+  querySnapshot.forEach((doc) => {
+    const revenue = doc.data();
+    if (
+      !revenue.description
+        .toUpperCase()
+        .includes(searchRevenue.toUpperCase()) &&
+      !revenue.preparingMode.toUpperCase().includes(searchRevenue.toUpperCase())
+    ) {
+      return;
+    }
+
+    const row = tbody.insertRow(-1);
+
+    const viewButton = getViewButton(doc.id);
+    const editButton = getEditButton(doc.id);
+    const trashButton = getTrashButton(doc.id);
+
+    row.innerHTML = `
+      <td>${revenue.description}</td>
+      <td>${formatNumberToBRLCurrency(revenue.revenueCost)}</td>
+      <td>${formatNumberToBRLCurrency(revenue.priceWithMargin)}</td>
+      <td>${formatNumberToBRLCurrency(revenue.salePrice)}</td>
+      <td>
+        <div class="action-buttons-group">
+          <div class="btn-icon">
+            ${viewButton.outerHTML}
+          </div>
+          <div class="btn-icon">
+            ${editButton.outerHTML}
+          </div>
+          <div class="btn-icon">
+            ${trashButton.outerHTML}
+          </div>
+        </div>
+      </td>
+    `;
+  });
+
+  const allDeleteButtons = document.querySelectorAll("[id^='deleteRevenue-']");
+
+  const allEditButtons = document.querySelectorAll("[id^='editRevenue-']");
+
+  const allViewButtons = document.querySelectorAll("[id^='viewRevenue-']");
+
+  allDeleteButtons.forEach((button) => {
+    const revenueId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      deleteRevenue(revenueId);
+    });
+  });
+
+  allEditButtons.forEach((button) => {
+    const revenueId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      editRevenue(revenueId);
+    });
+  });
+
+  allViewButtons.forEach((button) => {
+    const revenueId = button.id.split("-")[1];
+    button.parentNode.addEventListener("click", () => {
+      viewRevenue(revenueId);
+    });
+  });
+
+  loader.style.display = "none";
+});
 
 descartIngredientButton.addEventListener("click", () => {
   const selectIngredients = document.getElementById("selectIngredients");
@@ -696,75 +1144,14 @@ window.addEventListener("load", async () => {
 window.addEventListener("load", async function () {
   loader.style.display = "block";
 
-  const revenuesRef = collection(db, "revenues");
-  const userId = getUserId();
-
-  const q = query(revenuesRef, where("userId", "==", userId));
-
-  const querySnapshot = await getDocs(q);
-
-  if (querySnapshot.empty) {
-    loader.style.display = "none";
-    noDataFound.style.display = "block";
-    tableRevenues.style.display = "none";
-    return;
-  }
-
-  querySnapshot.forEach((doc) => {
-    const revenues = doc.data();
-    const row = tableRevenues.insertRow(-1);
-
-    const viewButton = getViewButton(doc.id);
-    const editButton = getEditButton(doc.id);
-    const trashButton = getTrashButton(doc.id);
-
-    row.innerHTML = `
-      <td>${revenues.description}</td>
-      <td>${formatNumberToBRLCurrency(revenues.revenueCost)}</td>
-      <td>${formatNumberToBRLCurrency(revenues.priceWithMargin)}</td>
-      <td>${formatNumberToBRLCurrency(revenues.salePrice)}</td>
-      <td>
-        <div class="action-buttons-group">
-          <div class="btn-icon">
-            ${viewButton.outerHTML}
-          </div>
-          <div class="btn-icon">
-            ${editButton.outerHTML}
-          </div>
-          <div class="btn-icon">
-            ${trashButton.outerHTML}
-          </div>
-        </div>
-      </td>
-    `;
-  });
-
-  const allDeleteButtons = document.querySelectorAll("[id^='deleteRevenue-']");
-
-  const allEditButtons = document.querySelectorAll("[id^='editRevenue-']");
-
-  const allViewButtons = document.querySelectorAll("[id^='viewRevenue-']");
-
-  allDeleteButtons.forEach((button) => {
-    const revenueId = button.id.split("-")[1];
-    button.parentNode.addEventListener("click", () => {
-      deleteRevenue(revenueId);
-    });
-  });
-
-  allEditButtons.forEach((button) => {
-    const revenueId = button.id.split("-")[1];
-    button.parentNode.addEventListener("click", () => {
-      editRevenue(revenueId);
-    });
-  });
-
-  allViewButtons.forEach((button) => {
-    const revenueId = button.id.split("-")[1];
-    button.parentNode.addEventListener("click", () => {
-      viewRevenue(revenueId);
-    });
-  });
-
-  loader.style.display = "none";
+  getRevenuesOrdered(
+    "description",
+    "asc",
+    "salePrice",
+    "asc",
+    "revenueCost",
+    "asc",
+    "priceWithMargin",
+    "asc"
+  );
 });

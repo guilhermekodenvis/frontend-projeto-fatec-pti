@@ -1,10 +1,10 @@
 .top-actions-group {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-  gap: 16px;
+  margin-top: 32px;
 }
 
 .register-sale-form-button-group {
@@ -50,4 +50,20 @@ div#formAddEquipamentToRevenue {
 
 .btn-text:hover {
   background-color: #9d85c6;
+}
+
+#descriptionOrderIcon {
+  visibility: visible;
+}
+
+#costOrderIcon {
+  visibility: hidden;
+}
+
+#suggestedPriceOrderIcon {
+  visibility: hidden;
+}
+
+#salePriceOrderIcon {
+  visibility: hidden;
 }

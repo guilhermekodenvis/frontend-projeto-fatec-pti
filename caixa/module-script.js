@@ -14,7 +14,7 @@ import { saveNumberStringAsNumber } from "../assets/js/save-number-string-as-num
 import { formatNumberToBRLCurrency } from "../assets/js/format-number-to-brl-currency.js";
 import { db } from "../assets/js/firebase-module.js";
 import { numberMaskInput } from "../assets/js/number-mask-input.js";
-import { getUserId } from "../assets/js/session-controller.js";
+import { getUserId, sessionLogout } from "../assets/js/session-controller.js";
 import { showNumberAsBrlNumber } from "../assets/js/show-number-as-brl-number.js";
 
 validateLogin();

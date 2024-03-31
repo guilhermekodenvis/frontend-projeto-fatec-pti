@@ -262,6 +262,18 @@ div#sidebar {
   transition: 0.2s ease-in step-end;
 }
 
+/* input */
+
+.search-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.search-container input {
+  width: 320px;
+}
+
 /* table */
 
 table {
@@ -275,6 +287,17 @@ th {
   text-align: left;
   padding: 8px 0;
   border-bottom: 1px solid #1301324c;
+}
+
+th.clickable {
+  cursor: pointer;
+}
+
+th svg {
+  margin-left: 16px;
+  vertical-align: middle;
+
+  transition: 0.2s;
 }
 
 td {

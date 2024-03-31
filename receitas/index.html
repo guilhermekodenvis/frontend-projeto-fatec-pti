@@ -25,17 +25,33 @@
         </div>
         <div class="dashboard-body">
           <div class="top-actions-group">
+            <div class="search-container">
+              <input type="text" id="searchRevenue" placeholder="Pesquisar receita">
+              <button class="btn btn-primary" id="searchRevenueButton">
+                <i data-feather="search"></i>
+              </button>
+            </div>
+
             <button class="btn btn-primary btn-wrap" id="btNewRevenue">Nova receita</button>
           </div>
         </div>
 
       <table id="tableRevenues">
         <thead>
-          <tr>
-            <th>Descrição</th>
-            <th>Custo</th>
-            <th>Preço sugerido (220%)</th>
-            <th>Preço de venda</th>
+            <tr>
+              <th class="clickable">
+              Descrição
+              <i data-feather="chevron-down" id="descriptionOrderIcon"></i>
+            </th>
+            <th class="clickable">Custo
+              <i data-feather="chevron-down" id="costOrderIcon"></i>
+            </th>
+            <th class="clickable">Preço sugerido (220%)
+              <i data-feather="chevron-down" id="suggestedPriceOrderIcon"></i>
+            </th>
+            <th class="clickable">Preço de venda
+              <i data-feather="chevron-down" id="salePriceOrderIcon"></i>
+            </th>
             <th>Ação</th>
           </tr>
         </thead>

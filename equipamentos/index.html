@@ -25,6 +25,14 @@
         </div>
         <div class="dashboard-body">
           <div class="top-actions-group">
+
+            <div class="search-container">
+              <input type="text" id="searchEquipament" placeholder="Pesquisar equipamento">
+              <button class="btn btn-primary" id="searchEquipamentButton">
+                <i data-feather="search"></i>
+              </button>
+            </div>
+
             <button class="btn btn-primary btn-wrap" id="btAddEquipament">Adicionar equipamento</button>
         </div>
       </div>
@@ -32,8 +40,14 @@
       <table id="tableEquipaments">
         <thead>
           <tr>
-            <th>Descrição</th>
-            <th>Recurso</th>
+            <th class="clickable">
+              Descrição
+              <i data-feather="chevron-down" id="descriptionOrderIcon"></i>
+            </th>
+            <th class="clickable">
+              Recurso
+              <i data-feather="chevron-down" id="resourceOrderIcon"></i>
+            </th>
             <th>Ação</th>
           </tr>
         </thead>

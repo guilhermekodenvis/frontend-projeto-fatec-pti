@@ -16,12 +16,19 @@ import {
   uploadString,
   getDownloadURL,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
-import { sessionGetUser } from "../assets/js/session-controller.js";
+import {
+  sessionGetUser,
+  sessionLogout,
+} from "../assets/js/session-controller.js";
 import { createSidebar } from "../components/sidebar.js";
 import { showDangerToast, showSuccessToast } from "../assets/js/toast.js";
+import { validateLogin } from "../assets/js/validate-login.js";
+
+validateLogin();
 
 const loader = document.getElementById("loader");
 const editProfile = document.getElementById("editProfile");
+const logoutButton = document.getElementById("logoutButton").parentElement;
 const getVerifyLinkAnchor = document.getElementById("getVerifyLinkAnchor");
 const editPassword = document.getElementById("editPassword");
 const cameraButton = document.getElementById("cameraButton");
@@ -149,8 +156,6 @@ editProfile.addEventListener("submit", (event) => {
   const bakeryName = event.target.elements.bakeryName.value;
   const avatarUrl = document.getElementById("avatar").src;
 
-  console.log(auth.currentUser.email);
-
   const userRef = doc(db, "users", uid);
   setDoc(userRef, {
     name,
@@ -222,6 +227,14 @@ editProfile.addEventListener("submit", (event) => {
   return;
 });
 
+logoutButton.addEventListener("click", () => {
+  loader.style.display = "block";
+
+  sessionLogout(() => {
+    loader.style.display = "none";
+  });
+});
+
 window.addEventListener("load", async () => {
   const createdSidebar = await createSidebar("management");
   sidebar.appendChild(createdSidebar);
@@ -246,7 +259,6 @@ window.addEventListener("load", async () => {
         bakeryName.value = user.bakeryName;
 
         if (!auth.currentUser.emailVerified) {
-          console.log(auth.currentUser);
           document.getElementById("notVerifiedEmail").style.display = "block";
         } else {
           document.getElementById("notVerifiedEmail").style.display = "none";
