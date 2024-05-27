@@ -1,3 +1,6 @@
 export const saveMoneyAsNumber = (money) => {
-  return Number(money.replace(".", "").replace(",", ".").replace("R$ ", ""));
+  console.log({ money });
+  return Number(
+    money.replace(".", "").replace(",", ".").replace("R$", "").trim()
+  );
 };

@@ -345,8 +345,10 @@ const editRevenue = (revenueId) => {
 
         btNewRevenue.click();
 
-        totalCost.innerText = formatNumberToBRLCurrency(revenueCost);
-        suggestedPrice.innerText = formatNumberToBRLCurrency(priceWithMargin);
+        totalCost.innerText = formatNumberToBRLCurrency(revenue.revenueCost);
+        suggestedPrice.innerText = formatNumberToBRLCurrency(
+          revenue.priceWithMargin
+        );
       } else {
         showDangerToast("Receita não encontrada.");
       }
@@ -391,6 +393,11 @@ const mountRevenuesTable = (querySnapshot) => {
     const viewButton = getViewButton(doc.id);
     const editButton = getEditButton(doc.id);
     const trashButton = getTrashButton(doc.id);
+
+    console.log(
+      `${revenue.description}`,
+      formatNumberToBRLCurrency(revenue.revenueCost)
+    );
 
     row.innerHTML = `
       <td>${revenue.description}</td>
@@ -1086,6 +1093,8 @@ formNewRevenue.addEventListener("submit", async (e) => {
   const preparingMode = e.target.preparingMode.value;
   const salePrice = e.target.salePrice.value;
   const editingRevenueId = e.target.editingRevenueId.value;
+
+  console.log("salePrice", saveMoneyAsNumber(salePrice));
 
   const revenue = {
     description,
