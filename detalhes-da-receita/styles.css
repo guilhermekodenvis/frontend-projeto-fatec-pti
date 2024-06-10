@@ -73,6 +73,8 @@
 
 .indent-left {
   margin-left: 48px;
+  max-width: 90%;
+  line-height: 28px;
 }
 
 .header-description {
